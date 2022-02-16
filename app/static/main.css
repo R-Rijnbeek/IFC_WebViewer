@@ -1,0 +1,44 @@
+body {
+  background: linear-gradient(#ced7de, #808080);
+  margin: 0px;
+  overflow: hidden;
+}
+#pythonocc_rocks {
+  padding: 5px;
+  position: absolute;
+  left: 1%;
+  bottom: 2%;
+  height: 38px;
+  width: 280px;
+  border-radius: 5px;
+  border: 2px solid #f7941e;
+  opacity: 0.7;
+  font-family: Arial;
+  background-color: #414042;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+}
+#commands {
+  padding: 5px;
+  position: absolute;
+  right: 1%;
+  top: 2%;
+  height: 65px;
+  width: 180px;
+  border-radius: 5px;
+  border: 2px solid #f7941e;
+  opacity: 0.7;
+  font-family: Arial;
+  background-color: #414042;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+}
+a {
+  color: #f7941e;
+  text-decoration: none;
+}
+a:hover {
+  color: #ffffff;
+}
