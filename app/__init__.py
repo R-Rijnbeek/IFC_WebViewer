@@ -6,11 +6,11 @@ __init__.py: This module define the the webservice function build with Flask
 __author__          = "Robert Rijnbeek"
 __version__         = "1.0.1"
 __maintainer__      = "Robert Rijnbeek"
-__email__           = "r.rijnbeek@dinsa.es"
+__email__           = "robert270384@gmail.com"
 __status__          = "Development"
 
-__creation_date__   = '31/3/2019'
-__last_update__     = '31/3/2019'
+__creation_date__   = '16/02/2022'
+__last_update__     = '16/02/2022'
 
 # =============== IMPORTS ==============
 
