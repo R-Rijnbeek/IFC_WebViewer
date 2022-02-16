@@ -12,9 +12,69 @@ from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discreti
 
 import ifcopenshell.geom
 
-from MODELATE_PROCESS.API.ifc_api import GetTextureFromIfcProduct
-
 # =============== PROCESS ===============
+
+def GetTextureFromIfcProduct(IFC_PRODUCT,MODE=""):
+    """
+    INPUT:
+        - PRODUCT => IfcProduct object
+    OUTPUT:
+        - Typle of lenght 4
+            COLOR FOUND: True
+                - [0] RED => Float in range (0,1)
+                - [1] GREEN => Float in range (0,1)
+                - [2] BLUE => Float in range (0,1)
+                - [3] OPACITY => Float in range (0,1)
+            COLOR FOUND: False
+                - [0] RED     = 1. Float 
+                - [1] GREEN   = 1. Float 
+                - [2] BLUE    = 1. Float
+                - [3] OPACITY = 1. Float
+    """
+    try:
+        representation=IFC_PRODUCT.Representation
+        representations=representation.Representations
+        for the_representation in representations:
+            if (the_representation.RepresentationIdentifier in ["Body","Facetation"]):
+                #the_representation=representations[0]
+                Items=the_representation.Items
+                Item=Items[0]
+                StyledByItems=Item.StyledByItem
+                if len(StyledByItems)>0:
+                    StyledByItem=StyledByItems[0]
+                    Styles=StyledByItem.Styles
+                    Style=Styles[0]
+                    Styles_2=Style.Styles
+                    Style_2=Styles_2[0]
+                    Styles_3=Style_2.Styles
+                    Style_3=Styles_3[0]
+                    Surface_Colour=Style_3.SurfaceColour
+                    Red=Surface_Colour.Red
+                    Green=Surface_Colour.Green
+                    Blue=Surface_Colour.Blue
+                    if "Transparency" in list(Style_3.__dict__):
+                        transparency = Style_3.Transparency
+                        if transparency is None:
+                            opacity = 1.
+                        else:
+                            if MODE == "Sketchup":
+                                opacity = transparency
+                            else:
+                                opacity = 1-transparency
+                    else:
+                        opacity = 1.
+                    return Red, Green, Blue, opacity
+        Red=1.
+        Green=1.
+        Blue=1.
+        opacity=1.
+        return Red, Green, Blue, opacity
+    except:
+        Red=1.
+        Green=1.
+        Blue=1.
+        opacity=1.
+        return Red, Green, Blue, opacity
 
 def DeleteJSONFilesFromDirectory(PATH):
     files = glob.glob(f'{PATH}*.json')
