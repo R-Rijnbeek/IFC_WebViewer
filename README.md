@@ -41,7 +41,6 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
     * ANACONDA:
     ```
     conda install -c conda-forge pythonocc-core ifcopenshell
-    conda install -c anaconda numpy
     conda install -c anaconda flask
     ``` 
 
