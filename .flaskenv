@@ -1,0 +1,4 @@
+FLASK_APP=entrypoint.py
+FLASK_RUN_HOST=localhost
+FLASK_RUN_HOST=8080
+FLASK_ENV=development

@@ -1,0 +1,16 @@
+click==7.1.2
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+distlib==0.3.4
+Flask==1.1.2
+gunicorn==20.1.0
+itsdangerous==1.1.0
+Jinja2==2.11.2
+loguru @ file:///D:/bld/loguru_1635859030717/work
+MarkupSafe @ file:///C:/ci/markupsafe_1621528502553/work
+platformdirs==2.5.1
+python-dotenv==0.19.2
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+virtualenv==20.13.3
+vtk===-PKG-VERSION
+Werkzeug==1.0.1
+win32-setctime @ file:///home/conda/feedstock_root/build_artifacts/win32_setctime_1642883564726/work

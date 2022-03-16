@@ -65,12 +65,12 @@ def create_app():
         CreateShapeDirectoryIfItNotExist(shape_path)
         DeleteJSONFilesFromDirectory(shape_path)
 
-        host = app.config["HOST"]
-        port = app.config["PORT"]
+        #host = app.config["HOST"]
+        #port = app.config["PORT"]
 
-        app.run(host=host,port = port)
+        #app.run(host=host,port = port)
 
-        return True
+        return app
     except Exception as exc:
         print(f"ERROR: unexpected error activting the webservice process: {exc}")
         return False

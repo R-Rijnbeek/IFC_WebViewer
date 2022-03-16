@@ -18,4 +18,4 @@ from app import create_app
 
 # ==== ACTIVATION OF THE WEBSERVICE ====
 
-create_app()
+app = create_app()
