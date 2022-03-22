@@ -3,7 +3,7 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 RUN apt-get update
-RUN apt-get install mesa-libGL
+RUN apt-get install python3-opencv
 
 # Create the environment:
 COPY app .
