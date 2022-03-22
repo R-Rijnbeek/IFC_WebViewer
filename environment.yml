@@ -7,3 +7,4 @@ dependencies:
   - ifcopenshell
   - pythonocc-core
   - opencv
+  - pyqt

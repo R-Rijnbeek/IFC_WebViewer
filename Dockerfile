@@ -2,9 +2,9 @@ FROM continuumio/anaconda3
 
 WORKDIR /app
 
-#RUN apt-get update
-#RUN apt-get install python3-opencv
-RUN find /usr -name libgl*
+RUN apt-get update
+RUN apt-get install python3-opencv
+#RUN find /usr -name libgl*
 
 # Create the environment:
 COPY app .
