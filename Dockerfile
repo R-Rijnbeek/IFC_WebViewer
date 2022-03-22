@@ -17,6 +17,7 @@ RUN python -c "import flask"
 
 # The code to run when container is started:
 COPY entrypoint.py entrypoint.sh ./
+COPY . /app
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
