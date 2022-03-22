@@ -7,5 +7,3 @@ dependencies:
   - ifcopenshell
   - pythonocc-core
   - opencv
-  pip:
-    - PyQt5
