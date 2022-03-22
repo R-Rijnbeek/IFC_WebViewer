@@ -16,7 +16,7 @@ RUN echo "Make sure flask is installed:"
 RUN python -c "import flask"
 
 # The code to run when container is started:
-COPY run.py entrypoint.sh ./
+COPY entrypoint.py entrypoint.sh ./
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
