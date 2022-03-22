@@ -2,6 +2,8 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
+RUN yum -y install mesa-libGL
+
 # Create the environment:
 COPY app .
 COPY environment.yml .
