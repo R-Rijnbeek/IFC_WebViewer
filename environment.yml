@@ -7,4 +7,4 @@ dependencies:
   - flask
   - ifcopenshell
   - pythonocc-core
-  
+  - opencv
