@@ -2,8 +2,9 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
-RUN apt-get update
-RUN apt-get install python3-opencv
+#RUN apt-get update
+#RUN apt-get install python3-opencv
+RUN ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 /usr/lib/libGL.so.1
 
 # Create the environment:
 COPY app .
