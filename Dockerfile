@@ -2,6 +2,8 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
+RUN sudo apt-get install python3-opencv
+
 # Create the environment:
 COPY app .
 COPY environment.yml .

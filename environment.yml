@@ -2,10 +2,9 @@ name: myenv
 channels:
   - anaconda
   - conda-forge
-  - defaults
 dependencies:
   - python=3.9
   - flask
   - ifcopenshell
   - pythonocc-core
-  - qt
+  
