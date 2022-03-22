@@ -14,4 +14,4 @@ conda activate myenv
 set -euo pipefail
 
 # exec the final command:
-exec python run.py
+exec python entrypoint.py
