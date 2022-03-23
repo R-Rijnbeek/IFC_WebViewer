@@ -1,3 +1,6 @@
+// @VertexShaderDefinition@ 
+// @FragmentShaderDefinition@  
+
 window.onload = () => {
     var camera, scene, renderer, object, stats, container, shape_material;
     var mouseX = 0;

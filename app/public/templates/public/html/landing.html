@@ -1,12 +1,12 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-<div id="container"></div>
+
+    <div id="container"></div>
     <div id="pythonocc_rocks">
-        pythonocc-{{occ_version}} <a href="https://github.com/mrdoob/three.js" target="_blank">three.js
-            {{threejs_release}}</a> renderer
-        <br>Check our blog at
-        <a href=http://www.pythonocc.org>http://www.pythonocc.org</a>
+        pythonocc-{{occ_version}} <a href="https://github.com/mrdoob/three.js" target="_blank">three.js {{threejs_release}}</a> renderer
+        <br>
+        Check our blog at <a href=http://www.pythonocc.org>http://www.pythonocc.org</a>
     </div>
     <div id="commands">
         <b>t</b> view/hide shape<br>
@@ -14,9 +14,5 @@
         <b>g</b> view/hide grid<br>
         <b>a</b> view/hide axis<br>
     </div>
-    
-    <!-- @VertexShaderDefinition@ -->
-    <!-- @FragmentShaderDefinition@  -->
-    
     
 {% endblock %}

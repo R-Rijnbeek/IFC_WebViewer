@@ -1,12 +1,4 @@
 # =============== IMPORTS ==============
-import os
-import sys
-import glob
-
-import json
-import uuid
-
-from functools import wraps
 
 from flask import make_response
 
@@ -14,6 +6,17 @@ from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
 
 import ifcopenshell.geom
+
+from functools import wraps
+
+import os
+import sys
+import glob
+
+import json
+import uuid
+
+# ============= DECORATORS ==========
 
 def returnsJS(f):
     @wraps(f)
