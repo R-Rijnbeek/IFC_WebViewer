@@ -3,17 +3,26 @@
 
     <head>
         <title>pythonocc {{occ_version}} webgl renderer</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for( 'static', filename='image/BuildingSmart_IFC_favicon.png' ) }}" />
         <meta name='Author' content='{{owner}} - {{owner_email}}'>
         <meta name='Keywords' content='WebGl,pythonocc'>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+
+        <meta property="og:type" content="viewer">
+        <meta property="og:url" content=""> 
+        <meta property="og:title" content="pythonocc {{occ_version}} webgl renderer">
+        <meta property="og:site_name" content="ifc viewer">
+        <meta property="og:description" content="A webViewer application that visualize IFC-2X3 content of a IFC file on web browser using webGL engine.">
+        <meta property="og:image" content="{{ url_for( 'static', filename='image/Image_IFC_Viewer.png' ) }}">
+
+        <link rel="stylesheet" href="{{ url_for( 'static', filename='css/main.css' ) }}">
 
         <script src="https://rawcdn.githack.com/mrdoob/three.js/{{threejs_release}}/build/three.min.js"></script>
         <script src="https://rawcdn.githack.com/mrdoob/three.js/{{threejs_release}}/examples/js/controls/TrackballControls.js"></script>
         <script src="https://rawcdn.githack.com/mrdoob/three.js/{{threejs_release}}/examples/js/libs/stats.min.js"></script>
 
         <script src="{{ url_for('js.get_js') }}" defer></script>
-
+        <script src="{{ url_for( 'static', filename='js/main.js' ) }}" defer></script>
     </head>
 
     <body>
