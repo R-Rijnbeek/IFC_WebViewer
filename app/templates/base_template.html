@@ -12,7 +12,9 @@
     <script src="https://rawcdn.githack.com/mrdoob/three.js/{{threejs_release}}/examples/js/controls/TrackballControls.js"></script>
     <script src="https://rawcdn.githack.com/mrdoob/three.js/{{threejs_release}}/examples/js/libs/stats.min.js"></script>
 
-    <script type="text/javascript">
+    <script src="{{ url_for('js.get_js') }}"></script>
+
+    <!-- <script type="text/javascript">
     window.onload = () => {
         var camera, scene, renderer, object, stats, container, shape_material;
         var mouseX = 0;
@@ -198,7 +200,7 @@
             renderer.render(scene, camera);
         }
     }
-    </script>
+    </script> -->
 
 </head>
 
