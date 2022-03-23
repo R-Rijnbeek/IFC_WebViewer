@@ -2,9 +2,9 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
+# Installation of the libgl library neccesary for OCC/ifcopenshell libraries
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev
-#RUN find /usr -name libgl*
 
 # Create the environment:
 COPY app .
