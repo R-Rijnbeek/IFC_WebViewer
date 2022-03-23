@@ -1,6 +1,6 @@
 FROM continuumio/miniconda3
 
-WORKDIR /
+WORKDIR /app
 
 # Installation of the libgl library neccesary for OCC/ifcopenshell libraries
 RUN apt-get update
