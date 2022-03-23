@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Custom modification
+.vscode/
 app/static/shapes/
