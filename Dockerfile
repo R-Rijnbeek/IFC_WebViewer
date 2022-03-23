@@ -3,7 +3,6 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 RUN apt-get update
-RUN apt-get install -y libsm6 libxext6 libxrender-dev
 RUN apt-get install -y libgl1-mesa-dev
 #RUN find /usr -name libgl*
 
