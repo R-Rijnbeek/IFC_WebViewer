@@ -1,13 +1,12 @@
 FROM continuumio/miniconda3
 
-WORKDIR /app
+WORKDIR /
 
 # Installation of the libgl library neccesary for OCC/ifcopenshell libraries
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev
 
 # Create the environment:
-COPY app .
 COPY environment.yml .
 RUN conda env create -f environment.yml
 
