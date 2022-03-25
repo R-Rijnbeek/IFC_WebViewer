@@ -243,7 +243,7 @@ class ThreejsRenderer:
         return self._3js_shapes, self._3js_edges
 
     
-    def generate_shape_imort_string(self):
+    def generate_shape_import_string(self):
         """ Generate the HTML file to be rendered by the web browser
         """
         #global BODY_PART0

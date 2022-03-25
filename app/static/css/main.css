@@ -2,6 +2,8 @@ body {
   background: linear-gradient(#ced7de, #808080);
   margin: 0px;
   overflow: hidden;
+  background-attachment: fixed;
+  
 }
 #pythonocc_rocks {
   padding: 5px;
@@ -35,12 +37,65 @@ body {
   font-size: 14px;
   opacity: 0.5;
 }
+
+#ifc_selector {
+  padding: 5px;
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  margin-top: 0px;
+  margin-left: -125px;
+  width: 250px;
+  height: 65px;
+  border: 2px solid #f7941e;
+  opacity: 0.7;
+  font-family: Arial;
+  background-color: #414042;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+  text-align: center
+}
+
+#render_ifc  {
+  margin-top: 5px;
+  padding:5px;
+  color: black;
+  opacity: 1;
+  width: 180px;
+  font: icon;
+  border-radius: 5px;
+  background-color: #8ff86b;
+  font-weight: bold;
+}
+
+#render_ifc:hover {
+  background-color: #7fda64;
+}
+
+#render_ifc:disabled,
+#render_ifc[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
 a {
   color: #f7941e;
   text-decoration: none;
 }
 a:hover {
   color: #ffffff;
+}
+
+select {
+  width: 240px;
+  border: 1px solid;
+  padding: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  white-space: initial;
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -55,4 +110,30 @@ a:hover {
     left: 5%;
     font-size: 30px;
   }
+
+  #ifc_selector {
+    width: 90%;
+    left: 5%;
+    height: 170px;
+    margin-left: auto;
+  }
+
+  select {
+    width: 90%;
+    border: 1px solid;
+    padding: 20px;
+    font-size: 30px;
+    border-radius: 15px;
+  }
+
+  #render_ifc {
+    width: 80%;
+    border: 1px solid;
+    padding: 10px;
+    font-size: 40px;
+    border-radius: 15px;
+    margin-top: 15px;
+  }
+
+  
 }
