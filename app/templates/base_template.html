@@ -9,11 +9,11 @@
         <meta charset="utf-8">
 
         <meta property="og:type" content="viewer">
-        <meta property="og:url" content=""> 
+        <meta property="og:url" content="{{ full_url }}"> 
         <meta property="og:title" content="pythonocc {{occ_version}} webgl renderer">
-        <meta property="og:site_name" content="ifc viewer">
+        <meta property="og:site_name" content="flask-ifc-viewer">
         <meta property="og:description" content="A webViewer application that visualize IFC-2X3 content of a IFC file on web browser using webGL engine.">
-        <meta property="og:image" content="{{ url_for( 'static', filename='image/Image_IFC_Viewer.png' ) }}">
+        <meta property="og:image" content="{{ image_url }}">
 
         <link rel="stylesheet" href="{{ url_for( 'static', filename='css/main.css' ) }}">
 
