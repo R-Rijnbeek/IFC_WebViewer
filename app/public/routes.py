@@ -12,29 +12,33 @@ from os.path import join, isfile, splitext
 @public_bp.route("/")
 def landing():
     	
-	
-	path = current_app.config["UPLOAD_FOLDER"]
-	file_list = [f for f in listdir(path) if isfile(join(path, f))]
-	
-    	
-	image_url = getOpenGraphImageURL(request)
-	full_url = getFullURL(request)
-    	
-	owner = current_app.config["OWNER"]
-	owner_email = current_app.config["OWNER_EMAIL"]
-	occ_version = current_app.config["OCC_VERSION"]
-	threejs_release = current_app.config["THREEJS_RELEASE"]
+	try:
+		path = current_app.config["UPLOAD_FOLDER"]
+		file_list = [f for f in listdir(path) if isfile(join(path, f))]
+		
+			
+		image_url = getOpenGraphImageURL(request)
+		full_url = getFullURL(request)
+			
+		owner = current_app.config["OWNER"]
+		owner_email = current_app.config["OWNER_EMAIL"]
+		occ_version = current_app.config["OCC_VERSION"]
+		threejs_release = current_app.config["THREEJS_RELEASE"]
 
-	return render_template(
-		"public/html/landing.html",
-		owner = owner, 
-		owner_email=owner_email, 
-		occ_version = occ_version, 
-		threejs_release = threejs_release, 
-		image_url = image_url, 
-		full_url = full_url,
-		file_list = file_list
-		)
+		return render_template(
+			"public/html/landing.html",
+			owner = owner, 
+			owner_email=owner_email, 
+			occ_version = occ_version, 
+			threejs_release = threejs_release, 
+			image_url = image_url, 
+			full_url = full_url,
+			file_list = file_list
+			)
+	except Exception as exc:
+		print(exc)
+		abort(500)
+
 
 @js.route("/public/js/webGL.js", methods=["GET"])
 @returnsJS

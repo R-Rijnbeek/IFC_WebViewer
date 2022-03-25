@@ -24,6 +24,7 @@ var animate_stat = false
 init();
 animate();
 function init() {
+
     var  removeDiv = document.getElementById("WebGL_Div");
     if (removeDiv) {
         document.body.removeChild(removeDiv);
@@ -77,6 +78,7 @@ function init() {
     document.addEventListener('keypress', onDocumentKeyPress, false);
     document.addEventListener('click', onDocumentMouseClick, false);
     window.addEventListener('resize', onWindowResize, false);
+    enableButton();
 }
 function animateStats() {
     if (screen.width > min_screen_width_for_stats) {

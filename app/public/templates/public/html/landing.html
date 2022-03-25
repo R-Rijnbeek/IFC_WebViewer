@@ -7,21 +7,26 @@
         <br>
         Check our blog at <a href=http://www.pythonocc.org>http://www.pythonocc.org</a>
     </div>
+
     <div id="commands">
         <b>t</b> view/hide shape<br>
         <b>w</b> toggle wireframe/shaded<br>
         <b>g</b> view/hide grid<br>
         <b>a</b> view/hide axis<br>
     </div>
+
     <div id="ifc_selector">
         <select name="ifc_file" id="ifc_file">
 
         {% for file in file_list %}
-            <option value="{{file}}">{{file}}</option>
+            <option  value="{{file}}">
+                {{file}}
+            </option>
         {% endfor %}
-        
+
         </select>
-        <button onclick="addWebGLSourceToHead();">click</button>
+        
+        <button id="render_ifc" onclick="addWebGLSourceToHead();">Render IFC</button>
     </div>
     
 {% endblock %}
