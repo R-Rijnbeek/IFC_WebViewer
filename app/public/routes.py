@@ -1,23 +1,33 @@
 
-from flask import render_template, current_app
+from flask import render_template, request, current_app
 
 import ifcopenshell
 
 from . import public_bp, js
-from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS
+from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL
 
 from os.path import join
 
 @public_bp.route("/")
 def landing():
     	
+	image_url = getOpenGraphImageURL(request)
+	full_url = getFullURL(request)
+    	
 	owner = current_app.config["OWNER"]
 	owner_email = current_app.config["OWNER_EMAIL"]
 	occ_version = current_app.config["OCC_VERSION"]
 	threejs_release = current_app.config["THREEJS_RELEASE"]
 
-	return render_template("public/html/landing.html",owner = owner, owner_email=owner_email,occ_version = occ_version, threejs_release = threejs_release)
-
+	return render_template(
+		"public/html/landing.html",
+		owner = owner, 
+		owner_email=owner_email, 
+		occ_version = occ_version, 
+		threejs_release = threejs_release, 
+		image_url = image_url, 
+		full_url = full_url
+		)
 
 @js.route("/public/js/webGL.js", methods=["GET"])
 @returnsJS

@@ -1,6 +1,6 @@
 # =============== IMPORTS ==============
 
-from flask import make_response
+from flask import make_response, url_for
 
 from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
@@ -298,6 +298,15 @@ class ThreejsRenderer:
         string_to_export += "".join(shape_string_list)
         string_to_export += "".join(edge_string_list)
         return string_to_export
+
+# ============== REQUEST FUNCTIONS ============
+
+def getOpenGraphImageURL(REQUEST):
+    return "".join([REQUEST.host_url[:-1], url_for( 'static', filename='image/Image_IFC_Viewer.png' )])
+
+def getFullURL(REQUEST):
+    return REQUEST.base_url
+
 
 # =============== EXECUTE TEST CODE ===============
 
