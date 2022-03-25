@@ -42,3 +42,17 @@ a {
 a:hover {
   color: #ffffff;
 }
+
+@media only screen and (max-device-width: 480px) {
+
+  #commands {
+    display:none
+  }
+
+  #pythonocc_rocks {
+    height: 75px;
+    width: 90%;
+    left: 5%;
+    font-size: 30px;
+  }
+}
