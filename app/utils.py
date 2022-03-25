@@ -307,7 +307,6 @@ def getOpenGraphImageURL(REQUEST):
 def getFullURL(REQUEST):
     return REQUEST.base_url
 
-
 # =============== EXECUTE TEST CODE ===============
 
 if __name__ == "__main__":

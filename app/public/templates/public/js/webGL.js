@@ -19,6 +19,7 @@ window.onload = () => {
     var selected_target_color_g = 0;
     var selected_target_color_b = 0;
     var selected_target = null;
+    var min_screen_width_for_stats = 500;
     init();
     animate();
     function init() {
@@ -57,11 +58,13 @@ window.onload = () => {
         renderer.shadowMap.type = THREE.PCFShadowMap;
         controls = new THREE.TrackballControls(camera, renderer.domElement);
         // show stats, is it really useful ?
-        stats = new Stats();
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.top = '2%';
-        stats.domElement.style.left = '1%';
-        container.appendChild(stats.domElement);
+        if (screen.width > min_screen_width_for_stats) {
+            stats = new Stats();
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.top = '2%';
+            stats.domElement.style.left = '1%';
+            container.appendChild(stats.domElement);
+        }
         // add events
         document.addEventListener('keypress', onDocumentKeyPress, false);
         document.addEventListener('click', onDocumentMouseClick, false);
@@ -71,7 +74,9 @@ window.onload = () => {
         requestAnimationFrame(animate);
         controls.update();
         render();
-        stats.update();
+        if (screen.width > min_screen_width_for_stats) {
+            stats.update();
+        }
     }
     function update_lights() {
         if (directionalLight != undefined) {
