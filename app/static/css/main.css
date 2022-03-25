@@ -2,6 +2,8 @@ body {
   background: linear-gradient(#ced7de, #808080);
   margin: 0px;
   overflow: hidden;
+  background-attachment: fixed;
+  
 }
 #pythonocc_rocks {
   padding: 5px;
@@ -35,6 +37,27 @@ body {
   font-size: 14px;
   opacity: 0.5;
 }
+
+#ifc_selector {
+  padding: 5px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 22px;
+  border: 2px solid #f7941e;
+  opacity: 0.7;
+  font-family: Arial;
+  background-color: #414042;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+  text-align: center
+}
+
 a {
   color: #f7941e;
   text-decoration: none;

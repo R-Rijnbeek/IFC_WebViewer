@@ -2,7 +2,6 @@
 
 {% block content %}
 
-    <div id="container"></div>
     <div id="pythonocc_rocks">
         pythonocc-{{occ_version}} <a href="https://github.com/mrdoob/three.js" target="_blank">three.js {{threejs_release}}</a> renderer
         <br>
@@ -13,6 +12,16 @@
         <b>w</b> toggle wireframe/shaded<br>
         <b>g</b> view/hide grid<br>
         <b>a</b> view/hide axis<br>
+    </div>
+    <div id="ifc_selector">
+        <select name="ifc_file" id="ifc_file">
+
+        {% for file in file_list %}
+            <option value="{{file}}">{{file}}</option>
+        {% endfor %}
+        
+        </select>
+        <button onclick="addWebGLSourceToHead();">click</button>
     </div>
     
 {% endblock %}
