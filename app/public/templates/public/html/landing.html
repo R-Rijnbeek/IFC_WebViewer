@@ -16,17 +16,41 @@
     </div>
 
     <div id="ifc_selector">
-        <select name="ifc_file" id="ifc_file">
+        <div>
+            <ul id="menu">
+                <li>
+                    <input type="radio" name="menu-selection" id="html-item" checked>
+                    <label onclick="selectIFC_Menu();" for="html-item">Select IFC</label>
+                </li>
+                <li>
+                    <input type="radio" name="menu-selection" id="css-item">
+                    <label onclick="uploadIFC_Menu();" for="css-item">Upload IFC</label>
+                </li>
+            </ul>
+        </div>
+        <div id="menu_1" style="display:block;">
+            <select name="ifc_file" id="ifc_file">
 
-        {% for file in file_list %}
-            <option  value="{{file}}">
-                {{file}}
-            </option>
-        {% endfor %}
-
-        </select>
+                {% for file in file_list %}
+                    <option  value="{{file}}">
+                        {{file}}
+                    </option>
+                {% endfor %}
         
-        <button id="render_ifc" onclick="addWebGLSourceToHead();">Render IFC</button>
+            </select>
+            <button id="render_ifc" onclick="addWebGLSourceToHead();">
+                Render IFC
+            </button>
+        </div>
+        <div id="menu_2" style="display:none;">
+            <button id="select_ifc_file" onclick="select_IFC_File();">Select IFC File</button>
+            <input type='file' id="getFile" style="display:none" onchange="file_selected(this)"">
+            <button id="render_ifc" onclick="hola();">
+                Render IFC
+            </button>
+        </div>
+        
+        
     </div>
     
 {% endblock %}

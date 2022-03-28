@@ -20,3 +20,22 @@ function enableButton() {
     var button = document.getElementById("render_ifc");
     button.disabled = false;
 }
+
+function selectIFC_Menu() {
+    document.getElementById("menu_1").style.display = "block"
+    document.getElementById("menu_2").style.display = "none"
+
+}
+
+function uploadIFC_Menu() {
+    document.getElementById("menu_1").style.display = "none"
+    document.getElementById("menu_2").style.display = "block"
+}
+
+function select_IFC_File() {
+    document.getElementById('getFile').click();
+}
+
+function file_selected(target) {
+    document.getElementById("select_ifc_file").innerHTML = target.files[0].name;
+}
