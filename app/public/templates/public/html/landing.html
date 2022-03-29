@@ -38,19 +38,27 @@
                 {% endfor %}
         
             </select>
-            <button id="render_ifc" onclick="addWebGLSourceToHead();">
+            <button id="render_ifc_1" class="render_ifc" onclick="processIFCSelectRequest();">
                 Render IFC
             </button>
         </div>
         <div id="menu_2" style="display:none;">
-            <button id="select_ifc_file" onclick="select_IFC_File();">Select IFC File</button>
-            <input type='file' id="getFile"  onchange="file_selected(this)">
-            <button id="render_ifc" onclick="hola();">
-                Render IFC
-            </button>
+            <form>
+                <button type="button" id="select_ifc_file" onclick="select_IFC_File();" >Select IFC File</button>
+                <div id="test2"><input type='file' id="getFile" onchange="file_selected(this);" ></div>
+                <button type="button" id="render_ifc_2" class="render_ifc" onclick="processSelectedIFC();" >
+                    Render IFC
+                </button>
+            </form>
+
         </div>
         
         
+    </div>
+
+    <div id="test">
+
+
     </div>
     
 {% endblock %}

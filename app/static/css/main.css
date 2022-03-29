@@ -58,7 +58,7 @@ body {
   text-align: center
 }
 
-#render_ifc  {
+.render_ifc  {
   margin-top: 2px;
   padding:3px;
   color: black;
@@ -166,7 +166,7 @@ ul#menu li input {
     height: auto;
   }
 
-  #render_ifc {
+  .render_ifc {
     width: 80%;
     border: 1px solid;
     padding: 10px;

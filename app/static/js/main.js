@@ -1,23 +1,53 @@
-function addWebGLSourceToHead(){
-    disableButton();
-
+function addWebGLSourceToHead(value){
     var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-
-    var select = document.getElementById('ifc_file');
-    var value = select.options[select.selectedIndex].value;
-
+    
+    var script = document.getElementById("WebGLScript");
+    if (script) {
+        script.remove(); 
+    } 
+    script = document.createElement('script');
+    script.setAttribute('id', "WebGLScript");
     script.setAttribute('src', js_url+"?ifc="+value);
+
     head.appendChild(script);
 }
 
-function disableButton() {
-    var button = document.getElementById("render_ifc");
+function processIFCSelectRequest(){
+    disableButton("render_ifc_1");
+
+    var select = document.getElementById('ifc_file');
+    var filename = select.options[select.selectedIndex].value;
+
+    addWebGLSourceToHead(filename);
+}
+
+function processSelectedIFC() {
+    let files = new FormData();
+    files.append('fileName', $('#getFile')[0].files[0]);
+    $.ajax({
+        type: 'post',
+        url: "fileUpload" ,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            var  filename = response.filename;
+            addWebGLSourceToHead(filename)
+        },
+        error: function (err) {
+            alert(err.responseText);
+        }
+    });
+    return false;
+}
+
+function disableButton(ID) {
+    var button = document.getElementById(ID);
     button.disabled = true;
 }
 
-function enableButton() {
-    var button = document.getElementById("render_ifc");
+function enableButton(ID) {
+    var button = document.getElementById(ID);
     button.disabled = false;
 }
 
