@@ -58,9 +58,10 @@ def create_app():
         #EXECUTE THE FLASK INSTANCE TO MAKE THE WEBSERVICE ACTIVE
         
 
-        from .public import public_bp, js
+        from .public import public_bp, js, upload
         app.register_blueprint(public_bp)
         app.register_blueprint(js)
+        app.register_blueprint(upload)
 
         shape_path = app.config["SHAPE_DIR"]
         CreateShapeDirectoryIfItNotExist(shape_path)

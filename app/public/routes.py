@@ -1,10 +1,12 @@
 
 from flask import abort, render_template, request, current_app
 
+from werkzeug.utils import secure_filename
+
 import ifcopenshell
 
-from . import public_bp, js
-from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL
+from . import public_bp, js, upload
+from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file
 
 from os import listdir
 from os.path import join, isfile, splitext
@@ -63,9 +65,25 @@ def get_js():
 			abort(400)
 	except Exception as exc:
 		print(exc)
-		abort(500)
+		return render_template("public/js/webGL_ERROR.js")
 
-
+@upload.route("/fileUpload", methods=["POST"])
+def fileUpload():
+	try:
+		if 'fileName' not in request.files:
+			return "Request have wrong data format", 400
+		file = request.files['fileName']
+		if file.filename == '':
+			return "No selected file", 400
+		if not allowed_file(file.filename):
+			return "File extension must be \".ifc\" format", 400
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(join(current_app.config['UPLOAD_FOLDER'], filename))
+			return {"filename":filename}, 200
+	except Exception as exc:
+		return f"ERROR: {exc}", 500
+    
 # =============== EXECUTE TEST CODE ===============
 
 if __name__ == "__main__":

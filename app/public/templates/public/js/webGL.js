@@ -78,7 +78,7 @@ function init() {
     document.addEventListener('keypress', onDocumentKeyPress, false);
     document.addEventListener('click', onDocumentMouseClick, false);
     window.addEventListener('resize', onWindowResize, false);
-    enableButton();
+    //enableIFCRenderButton();
 }
 function animateStats() {
     if (screen.width > min_screen_width_for_stats) {
@@ -123,7 +123,6 @@ function onDocumentKeyPress(event) {
     }
 }
 function onDocumentMouseClick(event) {
-    event.preventDefault();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     // restore previous selected target color
@@ -144,7 +143,7 @@ function onDocumentMouseClick(event) {
         console.log(target);
         selected_target = target;
     }
-}
+}  
 function fit_to_scene() {
     // compute bounding sphere of whole scene
     var center = new THREE.Vector3(0, 0, 0);

@@ -39,14 +39,14 @@ body {
 }
 
 #ifc_selector {
-  padding: 5px;
+  padding: 0px;
   position: absolute;
   top: 2%;
   left: 50%;
   margin-top: 0px;
   margin-left: -125px;
   width: 250px;
-  height: 65px;
+  height: 95px;
   border: 2px solid #f7941e;
   opacity: 0.7;
   font-family: Arial;
@@ -58,9 +58,9 @@ body {
   text-align: center
 }
 
-#render_ifc  {
-  margin-top: 5px;
-  padding:5px;
+.render_ifc  {
+  margin-top: 2px;
+  padding:3px;
   color: black;
   opacity: 1;
   width: 180px;
@@ -85,17 +85,57 @@ a {
   color: #f7941e;
   text-decoration: none;
 }
+
 a:hover {
   color: #ffffff;
+  transition: 0.3s;
 }
 
-select {
+select, #select_ifc_file {
   width: 240px;
+  height: 30px;
   border: 1px solid;
   padding: 5px;
   white-space: nowrap;
   overflow: hidden;
   white-space: initial;
+}
+
+ul#menu {
+  padding: 0;
+  font-family: sans-serif;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+ul#menu li {
+  display: inline-block;
+}
+
+ul#menu li label {
+  background-color: #d3d3d3;
+  color: black;
+  padding: 5px 20px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+ul#menu li input:checked + label {
+  background-color: #808080;
+}
+
+ul#menu li label:hover {
+  background-color: #bdbaba;
+  transition: 0.3s;
+}
+
+ul#menu li input {
+  position: fixed;
+  left: 100%;
+}
+
+#getFile {
+  display:none;
 }
 
 @media only screen and (max-device-width: 480px) {
@@ -114,19 +154,19 @@ select {
   #ifc_selector {
     width: 90%;
     left: 5%;
-    height: 170px;
+    height: 212px;
     margin-left: auto;
   }
 
   select {
     width: 90%;
     border: 1px solid;
-    padding: 20px;
     font-size: 30px;
     border-radius: 15px;
+    height: auto;
   }
 
-  #render_ifc {
+  .render_ifc {
     width: 80%;
     border: 1px solid;
     padding: 10px;
@@ -135,5 +175,22 @@ select {
     margin-top: 15px;
   }
 
+  #select_ifc_file {
+    width: 90%;
+    left: 5%;
+    height: auto;
+    font-size: 30px;
+    border: 1px solid;
+    border-radius: 15px;
+  }
+
+  ul#menu {
+    font-size: 30px;
+  }
+
+  ul#menu li {
+    width: 40%;
+    display: inline-grid;
+  }
   
 }

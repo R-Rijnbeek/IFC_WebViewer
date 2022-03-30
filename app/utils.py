@@ -1,6 +1,6 @@
 # =============== IMPORTS ==============
 
-from flask import make_response, url_for
+from flask import make_response, url_for, current_app
 
 from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
@@ -306,6 +306,11 @@ def getOpenGraphImageURL(REQUEST):
 
 def getFullURL(REQUEST):
     return REQUEST.base_url
+
+# =============== Upload file ===============
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config["UPLOADED_EXTENSIONS"]
 
 # =============== EXECUTE TEST CODE ===============
 
