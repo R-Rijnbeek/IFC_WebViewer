@@ -1,3 +1,21 @@
+var menu_index = 1;
+
+function renderIFC() {
+    disableIFCRenderButton();
+    switch(menu_index) {
+        case 1:
+            processIFCSelectRequest();
+            resetIFCSelector();
+            break;
+        case 2:
+            processSelectedIFC();
+            resetIFCFileSelector();
+            break;
+        default:
+            console.log("ERROR: wrong menu index");
+    }
+}
+
 function addWebGLSourceToHead(value){
     var head = document.getElementsByTagName('head')[0];
     
@@ -13,11 +31,8 @@ function addWebGLSourceToHead(value){
 }
 
 function processIFCSelectRequest(){
-    disableButton("render_ifc_1");
-
     var select = document.getElementById('ifc_file');
     var filename = select.options[select.selectedIndex].value;
-
     addWebGLSourceToHead(filename);
 }
 
@@ -41,25 +56,56 @@ function processSelectedIFC() {
     return false;
 }
 
-function disableButton(ID) {
-    var button = document.getElementById(ID);
-    button.disabled = true;
+function disableIFCRenderButton() {
+    document.getElementById("render_ifc").disabled = true;
 }
 
-function enableButton(ID) {
-    var button = document.getElementById(ID);
-    button.disabled = false;
+function enableIFCRenderButton() {
+    document.getElementById("render_ifc").disabled = false;
+}
+
+function resetIFCSelector() {
+    document.getElementById('ifc_file').selectedIndex = null;
+}
+
+function resetIFCFileSelector() {
+    document.getElementById('getFile').value = '';
+    document.getElementById("select_ifc_file").innerHTML = "Select IFC File";
+}
+
+function ButtonActivationController() {
+    switch(menu_index) {
+        case 1:
+            if (document.getElementById('ifc_file').selectedIndex != 0) {
+                enableIFCRenderButton();
+            } else {
+                disableIFCRenderButton();
+            }
+            break;
+        case 2:
+            if (document.getElementById('getFile').value != '') {
+                enableIFCRenderButton();
+            } else {
+                disableIFCRenderButton();
+            }
+            break;
+        default:
+            console.log("ERROR: wrong menu index");
+    }
 }
 
 function selectIFC_Menu() {
-    document.getElementById("menu_1").style.display = "block"
-    document.getElementById("menu_2").style.display = "none"
-
+    menu_index = 1;
+    document.getElementById("menu_1").style.display = "block";
+    document.getElementById("menu_2").style.display = "none";
+    ButtonActivationController();
 }
 
 function uploadIFC_Menu() {
-    document.getElementById("menu_1").style.display = "none"
-    document.getElementById("menu_2").style.display = "block"
+    menu_index = 2;
+    document.getElementById("menu_1").style.display = "none";
+    document.getElementById("menu_2").style.display = "block";
+    ButtonActivationController();
 }
 
 function select_IFC_File() {
@@ -68,4 +114,5 @@ function select_IFC_File() {
 
 function file_selected(target) {
     document.getElementById("select_ifc_file").innerHTML = target.files[0].name;
+    ButtonActivationController();
 }

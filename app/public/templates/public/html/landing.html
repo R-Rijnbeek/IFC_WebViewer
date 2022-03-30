@@ -29,36 +29,22 @@
             </ul>
         </div>
         <div id="menu_1" style="display:block;">
-            <select name="ifc_file" id="ifc_file">
-
+            <select name="ifc_file" id="ifc_file" onchange="ButtonActivationController();">
+                <option  value=""></option>
                 {% for file in file_list %}
                     <option  value="{{file}}">
                         {{file}}
                     </option>
                 {% endfor %}
-        
             </select>
-            <button id="render_ifc_1" class="render_ifc" onclick="processIFCSelectRequest();">
-                Render IFC
-            </button>
         </div>
         <div id="menu_2" style="display:none;">
-            <form>
                 <button type="button" id="select_ifc_file" onclick="select_IFC_File();" >Select IFC File</button>
                 <div id="test2"><input type='file' id="getFile" onchange="file_selected(this);" ></div>
-                <button type="button" id="render_ifc_2" class="render_ifc" onclick="processSelectedIFC();" >
-                    Render IFC
-                </button>
-            </form>
-
         </div>
-        
-        
-    </div>
-
-    <div id="test">
-
-
+        <button id="render_ifc" class="render_ifc" onclick="renderIFC();" disabled>
+            Render IFC
+        </button> 
     </div>
     
 {% endblock %}

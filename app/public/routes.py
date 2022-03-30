@@ -1,5 +1,5 @@
 
-from flask import abort, render_template, request, current_app, redirect
+from flask import abort, render_template, request, current_app
 
 from werkzeug.utils import secure_filename
 
@@ -65,7 +65,7 @@ def get_js():
 			abort(400)
 	except Exception as exc:
 		print(exc)
-		abort(500)
+		return render_template("public/js/webGL_ERROR.js")
 
 @upload.route("/fileUpload", methods=["POST"])
 def fileUpload():
