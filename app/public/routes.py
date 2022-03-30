@@ -49,7 +49,7 @@ def get_js():
 	try:	
 		file_name = request.args["ifc"]
 		filename, file_extension = splitext(file_name)
-		if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
+		if file_extension.replaceee(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
 			shape_path = current_app.config["SHAPE_DIR"]
 			ifc_file = ifcopenshell.open(join(current_app.config["BASE_DIR"],"app","static","ifc",file_name))
 			my_ren = ThreejsRenderer(path = shape_path )
@@ -64,8 +64,8 @@ def get_js():
 			print("it is not a valid file extension: it must be '.ifc'")
 			abort(400)
 	except Exception as exc:
-		print(exc)
-		return render_template("public/js/webGL_ERROR.js")
+		print(f"ERROR: {exc}")
+		return render_template("public/js/webGL_ERROR.js", error_message="INTERNAL SERVER ERROR")
 
 @upload.route("/fileUpload", methods=["POST"])
 def fileUpload():
@@ -82,7 +82,8 @@ def fileUpload():
 			file.save(join(current_app.config['UPLOAD_FOLDER'], filename))
 			return {"filename":filename}, 200
 	except Exception as exc:
-		return f"ERROR: {exc}", 500
+		print(f"ERROR: {exc}")
+		return f"INTERNAL SERVER ERROR", 500
     
 # =============== EXECUTE TEST CODE ===============
 

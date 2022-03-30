@@ -78,7 +78,6 @@ function init() {
     document.addEventListener('keypress', onDocumentKeyPress, false);
     document.addEventListener('click', onDocumentMouseClick, false);
     window.addEventListener('resize', onWindowResize, false);
-    //enableIFCRenderButton();
 }
 function animateStats() {
     if (screen.width > min_screen_width_for_stats) {

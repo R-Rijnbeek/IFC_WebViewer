@@ -50,7 +50,7 @@ function processSelectedIFC() {
             addWebGLSourceToHead(filename)
         },
         error: function (err) {
-            alert(err.responseText);
+            displayMessage(err.responseText);
         }
     });
     return false;
@@ -115,4 +115,21 @@ function select_IFC_File() {
 function file_selected(target) {
     document.getElementById("select_ifc_file").innerHTML = target.files[0].name;
     ButtonActivationController();
+}
+
+function displayMessage(TEXT) {
+    var message = document.getElementById("message");
+    message.innerHTML = TEXT;
+    message.style.opacity = 0.7;
+    setTimeout(() => {
+        var message = document.getElementById("message");
+        message.style.transition = 'opacity 5s';
+        message.style['-webkit-transition'] = 'opacity 5s';
+        message.style.opacity = 0.;
+        setTimeout(()=> {
+            var message = document.getElementById("message");
+            message.style.transition = 'opacity 0.5s';
+            message.style['-webkit-transition'] = 'opacity 0.5s';
+        },10);
+    }, 3000);
 }
