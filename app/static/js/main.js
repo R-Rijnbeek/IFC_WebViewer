@@ -46,7 +46,7 @@ function processSelectedIFC() {
         contentType: false,
         data: files,
         success: function (response) {
-            var  filename = response.filename;
+            var filename = response.filename;
             addWebGLSourceToHead(filename)
         },
         error: function (err) {

@@ -95,7 +95,7 @@ def DeleteJSONFilesFromDirectory(PATH):
     for f in files:
         os.remove(f)
 
-def CreateShapeDirectoryIfItNotExist(PATH):
+def CreateDirectoryIfItNotExist(PATH):
     if not os.path.exists(PATH):
         os.makedirs(PATH)
 

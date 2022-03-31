@@ -16,7 +16,7 @@ __last_update__     = '16/02/2022'
 
 from flask import Flask
 
-from .utils import DeleteJSONFilesFromDirectory, CreateShapeDirectoryIfItNotExist
+from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 
 # =============== PROCESS ===============
 
@@ -64,7 +64,9 @@ def create_app():
         app.register_blueprint(upload)
 
         shape_path = app.config["SHAPE_DIR"]
-        CreateShapeDirectoryIfItNotExist(shape_path)
+        upload_path = app.config["UPLOAD_FOLDER"]
+        CreateDirectoryIfItNotExist(shape_path)
+        CreateDirectoryIfItNotExist(upload_path)
         DeleteJSONFilesFromDirectory(shape_path)
 
         host = app.config["HOST"]

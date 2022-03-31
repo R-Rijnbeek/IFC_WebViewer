@@ -8,14 +8,14 @@ import ifcopenshell
 from . import public_bp, js, upload
 from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file
 
-from os import listdir
+from os import listdir, remove
 from os.path import join, isfile, splitext
 
 @public_bp.route("/")
 def landing():
     	
 	try:
-		path = current_app.config["UPLOAD_FOLDER"]
+		path = current_app.config["EXPOSITION_FOLDER"]
 		file_list = [f for f in listdir(path) if isfile(join(path, f))]
 		
 			
@@ -50,7 +50,11 @@ def get_js():
 		filename, file_extension = splitext(file_name)
 		if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
 			shape_path = current_app.config["SHAPE_DIR"]
-			ifc_file = ifcopenshell.open(join(current_app.config["BASE_DIR"],"app","static","ifc",file_name))
+			try:
+				ifc_file = ifcopenshell.open(join(current_app.config["EXPOSITION_FOLDER"],file_name))
+			except:
+				ifc_file = ifcopenshell.open(join(current_app.config["UPLOAD_FOLDER"],file_name))
+				remove(join(current_app.config["UPLOAD_FOLDER"],file_name))
 			my_ren = ThreejsRenderer(path = shape_path )
 			Append_IFC_Shapes_To_ThreejsRenderer_Object(my_ren,ifc_file)
 			shape_content = my_ren.generate_shape_import_string()
@@ -80,11 +84,18 @@ def fileUpload():
 		if not allowed_file(file.filename):
 			return "File extension must be \".ifc\" format", 400
 		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			file.save(join(current_app.config['UPLOAD_FOLDER'], filename))
-			return {"filename":filename}, 200
+			filename = secure_filename("".join(["temp_",file.filename]))
+			file_location = join(current_app.config['UPLOAD_FOLDER'],filename)
+			file.save(file_location)
+			try:
+				ifcopenshell.open(file_location)
+				return {"filename":filename}, 200
+			except:
+				remove(file_location)
+				return f"Problems parcing IFC file", 500
 	except Exception as exc:
 		print(f"ERROR: {exc}")
+		
 		return f"INTERNAL SERVER ERROR", 500
     
 # =============== EXECUTE TEST CODE ===============
