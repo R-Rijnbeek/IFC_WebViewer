@@ -118,18 +118,20 @@ function file_selected(target) {
 }
 
 function displayMessage(TEXT) {
-    var message = document.getElementById("message");
+    var message = this.document.getElementById("message");
     message.innerHTML = TEXT;
     message.style.opacity = 0.7;
+    message.style.display = 'block';
     setTimeout(() => {
-        var message = document.getElementById("message");
         message.style.transition = 'opacity 5s';
         message.style['-webkit-transition'] = 'opacity 5s';
         message.style.opacity = 0.;
         setTimeout(()=> {
-            var message = document.getElementById("message");
             message.style.transition = 'opacity 0.5s';
             message.style['-webkit-transition'] = 'opacity 0.5s';
+            setTimeout(()=>{
+                message.style.display = 'none';
+            },4000)
         },10);
     }, 3000);
 }
