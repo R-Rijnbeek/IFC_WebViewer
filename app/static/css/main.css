@@ -136,6 +136,7 @@ ul#menu li input {
 }
 
 #message {
+  display:none;
   padding: 0px;
   position: absolute;
   top: 50%;
