@@ -64,11 +64,10 @@ def get_js():
 				shape_content = shape_content
 				)
 		else:
-			print("it is not a valid file extension: it must be '.ifc'")
-			abort(400)
+			return render_template("public/js/webGL_ERROR.js", error_message="it is not a valid file extension: it must be '.ifc'")
 	except Exception as exc:
 		print(f"ERROR: {exc}")
-		if (exc.__module__ == "ifcopenshell"):
+		if (hasattr(exc, '__module__') and ( exc.__module__== "ifcopenshell")):
 			return render_template("public/js/webGL_ERROR.js", error_message=f"ERROR: {exc}")
 		else:
 			return render_template("public/js/webGL_ERROR.js", error_message="INTERNAL SERVER ERROR")

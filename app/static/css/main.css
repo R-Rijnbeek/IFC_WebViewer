@@ -159,7 +159,56 @@ ul#menu li input {
   -webkit-transition: opacity 0.5s;
 }
 
+.box {
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  position: absolute;
+  padding: 0px;
+  display: none;
+}
+.box .circle {
+  stroke-width: 4;
+  stroke: #f7941e;
+  stroke-linecap: round;
+}
 
+/*Rotate animation*/
+@keyframes rotate {
+  to {
+      transform: rotate(1turn)
+  }
+}
+/*Arc animation*/
+/*125 is the circumference of a circle*/
+@keyframes circle {
+  0% {
+/*Status 1: point*/
+      stroke-dasharray: 1 125;
+      stroke-dashoffset: 0;
+  }
+  50% {
+/*Status 2: circle*/
+      stroke-dasharray: 120, 125;
+      stroke-dashoffset: 0;
+  }
+  to {
+/*State 3: point (retracting in the direction of rotation)*/
+      stroke-dasharray: 120 125;
+      stroke-dashoffset: -125px;
+  }
+}
+.box {
+/*... ibid*/
+animation: rotate 2s linear infinite;
+}
+.circle {
+/*... ibid*/
+animation: circle 2s infinite;
+}
 
 @media only screen and (max-device-width: 480px) {
 
@@ -223,6 +272,17 @@ ul#menu li input {
     margin-left: -45%;
     font-size: 30px;
     line-height: 200px;
+  }
+
+  .box {
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -100px;
+    position: absolute;
+    padding: 0px;
   }
   
 }

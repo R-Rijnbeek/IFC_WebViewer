@@ -2,6 +2,7 @@ var menu_index = 1;
 
 function renderIFC() {
     disableIFCRenderButton();
+    enableRenderingAnimation();
     switch(menu_index) {
         case 1:
             processIFCSelectRequest();
@@ -51,6 +52,7 @@ function processSelectedIFC() {
         },
         error: function (err) {
             displayMessage(err.responseText);
+            disableRenderingAnimation();
         }
     });
     return false;
@@ -134,4 +136,12 @@ function displayMessage(TEXT) {
             },4000)
         },10);
     }, 3000);
+}
+
+function enableRenderingAnimation() {
+    document.getElementById("rendering_animation").style.display = "block";
+}
+
+function disableRenderingAnimation() {
+    document.getElementById("rendering_animation").style.display = "none";
 }
