@@ -45,7 +45,6 @@ def landing():
 @js.route("/public/js/webGL.js", methods=["GET"])
 @returnsJS
 def get_js():
-
 	try:	
 		file_name = request.args["ifc"]
 		filename, file_extension = splitext(file_name)
@@ -65,7 +64,10 @@ def get_js():
 			abort(400)
 	except Exception as exc:
 		print(f"ERROR: {exc}")
-		return render_template("public/js/webGL_ERROR.js", error_message="INTERNAL SERVER ERROR")
+		if (exc.__module__ == "ifcopenshell"):
+			return render_template("public/js/webGL_ERROR.js", error_message=f"ERROR: {exc}")
+		else:
+			return render_template("public/js/webGL_ERROR.js", error_message="INTERNAL SERVER ERROR")
 
 @upload.route("/fileUpload", methods=["POST"])
 def fileUpload():
