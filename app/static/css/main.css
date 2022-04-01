@@ -5,6 +5,7 @@ body {
   background-attachment: fixed;
   
 }
+
 #pythonocc_rocks {
   padding: 5px;
   position: absolute;
@@ -20,6 +21,7 @@ body {
   font-size: 14px;
   opacity: 0.5;
 }
+
 #commands {
   padding: 5px;
   position: absolute;
@@ -170,6 +172,7 @@ ul#menu li input {
   padding: 0px;
   display: none;
 }
+
 .box .circle {
   stroke-width: 4;
   stroke: #f7941e;
@@ -181,7 +184,9 @@ ul#menu li input {
   to {
       transform: rotate(1turn)
   }
+
 }
+
 /*Arc animation*/
 /*125 is the circumference of a circle*/
 @keyframes circle {
@@ -190,21 +195,25 @@ ul#menu li input {
       stroke-dasharray: 1 125;
       stroke-dashoffset: 0;
   }
+
   50% {
 /*Status 2: circle*/
       stroke-dasharray: 120, 125;
       stroke-dashoffset: 0;
   }
+
   to {
 /*State 3: point (retracting in the direction of rotation)*/
       stroke-dasharray: 120 125;
       stroke-dashoffset: -125px;
   }
+
 }
 .box {
 /*... ibid*/
 animation: rotate 2s linear infinite;
 }
+
 .circle {
 /*... ibid*/
 animation: circle 2s infinite;

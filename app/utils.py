@@ -1,20 +1,18 @@
 # =============== IMPORTS ==============
 
 from flask import make_response, url_for, current_app
-
 from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
-
 import ifcopenshell.geom
 
 from functools import wraps
-
 import os
 import sys
 import glob
-
 import json
-import uuid
+from uuid import uuid4
+
+from .shared import LOG
 
 # ============= DECORATORS ==========
 
@@ -24,6 +22,16 @@ def returnsJS(f):
         resp = make_response(f(*args, **kwargs),200)
         resp.headers['Content-Type'] = 'application/javascript'
         return resp
+    return decorated_function
+
+def methodLogging(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        uniqueID = uuid4()
+        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
+        output = f(*args, **kwargs)
+        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ , "output": str(output)}))
+        return output
     return decorated_function
 
 # =============== PROCESS ===============
@@ -90,15 +98,28 @@ def GetTextureFromIfcProduct(IFC_PRODUCT,MODE=""):
         opacity=1.
         return Red, Green, Blue, opacity
 
+@methodLogging
 def DeleteJSONFilesFromDirectory(PATH):
-    files = glob.glob(f'{PATH}*.json')
-    for f in files:
-        os.remove(f)
+    try:
+        files = glob.glob(f'{PATH}*.json')
+        for f in files:
+            os.remove(f)
+        return True
+    except Exception as exc:
+        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
+        return False
 
+@methodLogging
 def CreateDirectoryIfItNotExist(PATH):
-    if not os.path.exists(PATH):
-        os.makedirs(PATH)
+    try:
+        if not os.path.exists(PATH):
+            os.makedirs(PATH)
+        return True
+    except Exception as exc:
+        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
+        return False
 
+@methodLogging
 def Append_IFC_Shapes_To_ThreejsRenderer_Object(THREEJS_RENDERER_OBJECT,IFC_FILE):
     settings=ifcopenshell.geom.settings( )
     settings.set( settings.USE_PYTHON_OPENCASCADE , True)
@@ -179,7 +200,7 @@ class ThreejsRenderer:
         if is_edge(shape):
             print("discretize an edge")
             pnts = discretize_edge(shape)
-            edge_hash = "edg%s" % uuid.uuid4().hex
+            edge_hash = "edg%s" % uuid4().hex
             str_to_write = export_edgedata_to_json(edge_hash, pnts)
             edge_full_path = os.path.join(self._path, edge_hash + '.json')
             with open(edge_full_path, "w") as edge_file:
@@ -190,7 +211,7 @@ class ThreejsRenderer:
         elif is_wire(shape):
             print("discretize a wire")
             pnts = discretize_wire(shape)
-            wire_hash = "wir%s" % uuid.uuid4().hex
+            wire_hash = "wir%s" % uuid4().hex
             str_to_write = export_edgedata_to_json(wire_hash, pnts)
             wire_full_path = os.path.join(self._path, wire_hash + '.json')
             with open(wire_full_path, "w") as wire_file:
@@ -198,7 +219,7 @@ class ThreejsRenderer:
             # store this edge hash
             self._3js_edges[wire_hash] = [color, line_width]
             return self._3js_shapes, self._3js_edges
-        shape_uuid = uuid.uuid4().hex
+        shape_uuid = uuid4().hex
         shape_hash = "shp%s" % shape_uuid
         # tesselate
         tess = ShapeTesselator(shape)
@@ -232,7 +253,7 @@ class ThreejsRenderer:
                 for i_vert in range(nbr_vertices):
                     edge_point_set.append(tess.GetEdgeVertex(i_edge, i_vert))
                 # write to file
-                edge_hash = "edg%s" % uuid.uuid4().hex
+                edge_hash = "edg%s" % uuid4().hex
                 str_to_write += export_edgedata_to_json(edge_hash, edge_point_set)
                 # create the file
                 edge_full_path = os.path.join(self._path, edge_hash + '.json')
@@ -242,7 +263,7 @@ class ThreejsRenderer:
                 self._3js_edges[edge_hash] = [(0, 0, 0), line_width]
         return self._3js_shapes, self._3js_edges
 
-    
+    @methodLogging
     def generate_shape_import_string(self):
         """ Generate the HTML file to be rendered by the web browser
         """
