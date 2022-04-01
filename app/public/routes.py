@@ -1,16 +1,17 @@
+# =============== IMPORTS ==============
 
 from flask import abort, render_template, request, current_app
-
 from werkzeug.utils import secure_filename
-
 import ifcopenshell
+
+from os import listdir, remove
+from os.path import join, isfile, splitext
 
 from . import public_bp, js, upload
 from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file, methodLogging
 from ..shared import LOG
 
-from os import listdir, remove
-from os.path import join, isfile, splitext
+# =============== DEFINE ENTRYPOINTS ==============
 
 @public_bp.route("/")
 @methodLogging
@@ -112,7 +113,7 @@ def fileUpload():
 	except Exception as exc:
 		LOG.error(f"ERROR: {LOG.getFunctionName()}: {exc}")
 		return f"INTERNAL SERVER ERROR", 500
-    
+
 # =============== EXECUTE TEST CODE ===============
 
 if __name__ == "__main__":

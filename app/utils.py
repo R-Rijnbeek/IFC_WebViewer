@@ -1,23 +1,18 @@
 # =============== IMPORTS ==============
 
-from ast import Try
 from flask import make_response, url_for, current_app
-
 from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
-
 import ifcopenshell.geom
 
-from .shared import LOG
-
 from functools import wraps
-
 import os
 import sys
 import glob
-
 import json
 from uuid import uuid4
+
+from .shared import LOG
 
 # ============= DECORATORS ==========
 

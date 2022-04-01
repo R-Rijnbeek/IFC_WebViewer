@@ -1,8 +1,10 @@
+# =============== DEFINE BLUEPRINTS ==============
+
 import logging
 from functools import wraps
-
 import sys
 
+# =============== DEFINE LOGSTREAM ==============
 class LogStream():
     def __init__(self, MAX_RECORDS ):
 
@@ -28,6 +30,8 @@ class LogStream():
     def _getStream(self):
         return "".join(self.logs)
 
+
+# =============== DEFINE APPLICATION LOGGER CLASS ==============
 class ApplicationLogger():
     def __init__(self,logname):
         self.logname = logname
@@ -71,6 +75,9 @@ class ApplicationLogger():
                 #print("Logger is not activated so the method is not processed")
                 return
         return inner1
+
+    def isLoggerActive(self):
+        return self._activated
 
     @_isActive
     def getStream(self):
