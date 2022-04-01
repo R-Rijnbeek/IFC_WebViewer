@@ -2,7 +2,8 @@
 
 A webViewer application that visualize IFC content of a file on web browser. Tested with IFC2X3
 
-* EXAMPLE: [ Visit web ](http://flask-ifc-viewer.herokuapp.com/)
+* EXAMPLE: [ Visit web ](http://flask-ifc-viewer.herokuapp.com/) 
+      (it is a free Dynos, so sometimes it take some time to initialize the Heroku instance)
 
 ## prerequisites
 
