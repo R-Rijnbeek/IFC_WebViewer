@@ -1,6 +1,8 @@
 # IFC_WebViewer
 
-A webViewer application that visualize IFC content of a file on web browser. Tested with IFC IFC2X3
+A webViewer application that visualize IFC content of a file on web browser. Tested with IFC2X3
+
+* EXAMPLE: [ Visit web ](http://flask-ifc-viewer.herokuapp.com/)
 
 ## prerequisites
 
@@ -36,8 +38,8 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
 
 ## Notes to know: 
 
-1. The dependencies to use all features of this repository are writed on the environmet.yml file: OCC, numpy, ifcopenshell and Flask
-2. If you will only use the content of this repository. On a other project than you need to create an virtual environment that include "ifcopenshell", "OCC", "flask" and "numpy"
+1. The dependencies to use all features of this repository are writed on the environmet.yml file: OCC, ifcopenshell and Flask
+2. If you will only use the content of this repository. On a other project than you need to create an virtual environment that include "ifcopenshell", "OCC" and "flask"
     * ANACONDA:
     ```
     conda install -c conda-forge pythonocc-core ifcopenshell
@@ -45,3 +47,15 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
     ``` 
 
 3. This repository is tested with windows 10 and anaconda version 4.11.0.
+
+## Improvments
+
+1. ifc uploaded files will be better to store them in memory and no on a location of the server.
+2. include multiprocessing to make the process rendering process faster on server site.
+3. put an render process bar on client side when ifc file is processed on server site.
+4. Remove all tree.js instances when reloading an new object.
+5. Will be fine to include and opacity slider GUI on rendering window.
+6. ....
+
+
+
