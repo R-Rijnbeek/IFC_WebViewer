@@ -50,12 +50,9 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
 
 ## Improvments
 
-1. ifc uploaded files will be better to store them in memory and no on a location of the server.
-2. include multiprocessing to make the process rendering process faster on server site.
-3. put an render process bar on client side when ifc file is processed on server site.
+1. Uploaded ifc files will must be stored in memory and no on a location of the server.
+2. Include multiprocessing to make the process rendering process faster on server site.
+3. Put an render process bar on client side when ifc file is processed on server site.
 4. Remove all tree.js instances when reloading an new object.
 5. Will be fine to include and opacity slider GUI on rendering window.
 6. ....
-
-
-
