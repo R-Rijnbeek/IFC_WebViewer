@@ -5,6 +5,12 @@ from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
 import ifcopenshell.geom
 
+# for argument check
+from OCC.Core.TopoDS import TopoDS_Compound
+from werkzeug.local import LocalProxy
+import ifcopenshell.entity_instance as ifc_instance
+import ifcopenshell.file as ifc_file
+
 from functools import wraps
 import os
 import sys
@@ -14,7 +20,46 @@ from uuid import uuid4
 
 from .shared import LOG
 
+
+
 # ============= DECORATORS ==========
+
+def argument_check(*types_args,**types_kwargs):
+    """
+    INFORMATION: Standard decorator with arguments that is used to verify the agument (arg) or opttion arguments (kwargs) 
+                 of linked function. If the decorator see an not valid argument or kwarg in the funcion. 
+                 There will be generate an exception with the explanation with the argument that is not correct.
+    INPUT: 
+        - *types_args: Tuple of arguments where eatch argument can will be a a type (simple object type) or types of 
+                       object types (when you define a tuple of objects). Or if it is defined as an list. Those values of the list 
+                       are the option of the values thay those arguments can will be.
+        - **types_kwargs: dict of kwargs where eatch argument can will be a a type (simple object type) or types of object types 
+                          (when you define a tuple of objects). Or if it is defined as an list for a key of a dict. The keyvalue of a
+                          dict must be in the defined list liked to that veyvalue.
+    OUTPUT:
+        - ERROR: EXECUTION OF THE LINKED FUNCTION
+        - NO ERROR: A DEFINED EXCEPTION
+    """
+    def check_accepts(f):
+        def function_wrapper(*args, **kwargs):
+            if len(args) is not  len(types_args):
+                assert isinstance(args, types_args), f"In function '{f.__name__}{args}' and option values: {kwargs}, lenght of argumnets {args} is not the same as types_args {types_args}"
+            for (arg, type_arg) in zip(args, types_args):
+                if isinstance(type_arg,list):
+                    assert arg in type_arg, f"In function '{f.__name__}{args}' and option values: {kwargs}, argument {arg} is not in list {type_arg}" 
+                else:
+                    assert isinstance(arg, type_arg), f"In function '{f.__name__}{args}' and option values: {kwargs}, arg {arg} does not match {type_arg}" 
+            for kwarg,value in kwargs.items():
+                assert kwarg in types_kwargs , f"In function '{f.__name__}{args}' and option values: {kwargs}, the kwarg ('{kwarg}':{value}) is not a valid option value" 
+                espected_format = types_kwargs[kwarg]
+                if isinstance(espected_format,list): 
+                    assert value in espected_format, f"In function '{f.__name__}{args}' and option values: {kwargs}, the kwarg value ('{kwarg}':{value}) is not in list {espected_format}" 
+                else:
+                    assert isinstance(value, espected_format), f"In function '{f.__name__}{args}' and option values: {kwargs}, kwarg value ('{kwarg}':{value}) does not match with {espected_format}" 
+            return f(*args, **kwargs)
+        function_wrapper.__name__ = f.__name__
+        return function_wrapper
+    return check_accepts
 
 def returnsJS(f):
     @wraps(f)
@@ -36,147 +81,8 @@ def methodLogging(f):
 
 # =============== PROCESS ===============
 
-def GetTextureFromIfcProduct(IFC_PRODUCT,MODE=""):
-    """
-    INPUT:
-        - PRODUCT => IfcProduct object
-    OUTPUT:
-        - Typle of lenght 4
-            COLOR FOUND: True
-                - [0] RED => Float in range (0,1)
-                - [1] GREEN => Float in range (0,1)
-                - [2] BLUE => Float in range (0,1)
-                - [3] OPACITY => Float in range (0,1)
-            COLOR FOUND: False
-                - [0] RED     = 1. Float 
-                - [1] GREEN   = 1. Float 
-                - [2] BLUE    = 1. Float
-                - [3] OPACITY = 1. Float
-    """
-    try:
-        representation=IFC_PRODUCT.Representation
-        representations=representation.Representations
-        for the_representation in representations:
-            if (the_representation.RepresentationIdentifier in ["Body","Facetation"]):
-                #the_representation=representations[0]
-                Items=the_representation.Items
-                Item=Items[0]
-                StyledByItems=Item.StyledByItem
-                if len(StyledByItems)>0:
-                    StyledByItem=StyledByItems[0]
-                    Styles=StyledByItem.Styles
-                    Style=Styles[0]
-                    Styles_2=Style.Styles
-                    Style_2=Styles_2[0]
-                    Styles_3=Style_2.Styles
-                    Style_3=Styles_3[0]
-                    Surface_Colour=Style_3.SurfaceColour
-                    Red=Surface_Colour.Red
-                    Green=Surface_Colour.Green
-                    Blue=Surface_Colour.Blue
-                    if "Transparency" in list(Style_3.__dict__):
-                        transparency = Style_3.Transparency
-                        if transparency is None:
-                            opacity = 1.
-                        else:
-                            if MODE == "Sketchup":
-                                opacity = transparency
-                            else:
-                                opacity = 1-transparency
-                    else:
-                        opacity = 1.
-                    return Red, Green, Blue, opacity
-        Red=1.
-        Green=1.
-        Blue=1.
-        opacity=1.
-        return Red, Green, Blue, opacity
-    except:
-        Red=1.
-        Green=1.
-        Blue=1.
-        opacity=1.
-        return Red, Green, Blue, opacity
-
-@methodLogging
-def DeleteJSONFilesFromDirectory(PATH):
-    try:
-        files = glob.glob(f'{PATH}*.json')
-        for f in files:
-            os.remove(f)
-        return True
-    except Exception as exc:
-        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
-        return False
-
-@methodLogging
-def CreateDirectoryIfItNotExist(PATH):
-    try:
-        if not os.path.exists(PATH):
-            os.makedirs(PATH)
-        return True
-    except Exception as exc:
-        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
-        return False
-
-@methodLogging
-def Append_IFC_Shapes_To_ThreejsRenderer_Object(THREEJS_RENDERER_OBJECT,IFC_FILE):
-    settings=ifcopenshell.geom.settings( )
-    settings.set( settings.USE_PYTHON_OPENCASCADE , True)
-    products = IFC_FILE.by_type( "IfcProduct" )
-    for product in products :
-        if product.is_a("IfcOpeningElement") or product.is_a("IfcAnnotation") or product.is_a("IfcSpace"):
-            continue
-        if product.Representation:
-            print(product.is_a())
-
-            r,g,b,o = GetTextureFromIfcProduct(product)
-            shape = ifcopenshell.geom.create_shape(settings, product).geometry
-            THREEJS_RENDERER_OBJECT.DisplayShape(shape, export_edges=False,color = (r,g,b),transparency = 0.5)
-
-def spinning_cursor():
-    while True:
-        for cursor in '|/-\\':
-            yield cursor
-
-def color_to_hex(rgb_color):
-    """ Takes a tuple with 3 floats between 0 and 1.
-    Returns a hex. Useful to convert occ colors to web color code
-    """
-    r, g, b = rgb_color
-    if not (0 <= r <= 1. and 0 <= g <= 1. and 0 <= b <= 1.):
-        raise AssertionError("rgb values must be between 0.0 and 1.0")
-    rh = int(r * 255.)
-    gh = int(g * 255.)
-    bh = int(b * 255.)
-    return "0x%.02x%.02x%.02x" % (rh, gh, bh)
-
-def export_edgedata_to_json(edge_hash, point_set):
-    """ Export a set of points to a LineSegment buffergeometry
-    """
-    # first build the array of point coordinates
-    # edges are built as follows:
-    # points_coordinates  =[P0x, P0y, P0z, P1x, P1y, P1z, P2x, P2y, etc.]
-    points_coordinates = []
-    for point in point_set:
-        for coord in point:
-            points_coordinates.append(coord)
-    # then build the dictionnary exported to json
-    edges_data = {"metadata": {"version": 4.4,
-                               "type": "BufferGeometry",
-                               "generator": "pythonocc"},
-                  "uuid": edge_hash,
-                  "type": "BufferGeometry",
-                  "data": {"attributes": {"position": {"itemSize": 3,
-                                                       "type": "Float32Array",
-                                                       "array": points_coordinates}
-                                         }
-                          }
-                  }
-    return json.dumps(edges_data)
-
-
 class ThreejsRenderer:
+    @argument_check(object, path=(str,type(None)))
     def __init__(self, path=None):
         self._path = path
         #self._html_filename = os.path.join(self._path, "index.html")
@@ -185,7 +91,7 @@ class ThreejsRenderer:
         self.spinning_cursor = spinning_cursor()
         #print("## threejs %s webgl renderer" % THREEJS_RELEASE)
 
-    
+    @argument_check(object, TopoDS_Compound, export_edges=bool, color=tuple, specular_color=tuple, shininess=(float,int), transparency=(float,int), line_color=tuple, line_width=(float,int), mesh_quality=(float,int))
     def DisplayShape(self,
                      shape,
                      export_edges=False,
@@ -264,6 +170,7 @@ class ThreejsRenderer:
         return self._3js_shapes, self._3js_edges
 
     @methodLogging
+    @argument_check(object)
     def generate_shape_import_string(self):
         """ Generate the HTML file to be rendered by the web browser
         """
@@ -320,16 +227,166 @@ class ThreejsRenderer:
         string_to_export += "".join(edge_string_list)
         return string_to_export
 
+@argument_check(ifc_instance, MODE=str )
+def GetTextureFromIfcProduct(IFC_PRODUCT,MODE=""):
+    """
+    INPUT:
+        - PRODUCT => IfcProduct object
+    OUTPUT:
+        - Typle of lenght 4
+            COLOR FOUND: True
+                - [0] RED => Float in range (0,1)
+                - [1] GREEN => Float in range (0,1)
+                - [2] BLUE => Float in range (0,1)
+                - [3] OPACITY => Float in range (0,1)
+            COLOR FOUND: False
+                - [0] RED     = 1. Float 
+                - [1] GREEN   = 1. Float 
+                - [2] BLUE    = 1. Float
+                - [3] OPACITY = 1. Float
+    """
+    try:
+        representation=IFC_PRODUCT.Representation
+        representations=representation.Representations
+        for the_representation in representations:
+            if (the_representation.RepresentationIdentifier in ["Body","Facetation"]):
+                #the_representation=representations[0]
+                Items=the_representation.Items
+                Item=Items[0]
+                StyledByItems=Item.StyledByItem
+                if len(StyledByItems)>0:
+                    StyledByItem=StyledByItems[0]
+                    Styles=StyledByItem.Styles
+                    Style=Styles[0]
+                    Styles_2=Style.Styles
+                    Style_2=Styles_2[0]
+                    Styles_3=Style_2.Styles
+                    Style_3=Styles_3[0]
+                    Surface_Colour=Style_3.SurfaceColour
+                    Red=Surface_Colour.Red
+                    Green=Surface_Colour.Green
+                    Blue=Surface_Colour.Blue
+                    if "Transparency" in list(Style_3.__dict__):
+                        transparency = Style_3.Transparency
+                        if transparency is None:
+                            opacity = 1.
+                        else:
+                            if MODE == "Sketchup":
+                                opacity = transparency
+                            else:
+                                opacity = 1-transparency
+                    else:
+                        opacity = 1.
+                    return Red, Green, Blue, opacity
+        Red=1.
+        Green=1.
+        Blue=1.
+        opacity=1.
+        return Red, Green, Blue, opacity
+    except:
+        Red=1.
+        Green=1.
+        Blue=1.
+        opacity=1.
+        return Red, Green, Blue, opacity
+
+@methodLogging
+@argument_check(str)
+def DeleteJSONFilesFromDirectory(PATH):
+    try:
+        files = glob.glob(f'{PATH}*.json')
+        for f in files:
+            os.remove(f)
+        return True
+    except Exception as exc:
+        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
+        return False
+
+@methodLogging
+@argument_check(str)
+def CreateDirectoryIfItNotExist(PATH):
+    try:
+        if not os.path.exists(PATH):
+            os.makedirs(PATH)
+        return True
+    except Exception as exc:
+        LOG.error(f"ERROR {LOG.getFunctionName()}: {exc}")
+        return False
+
+@methodLogging
+@argument_check(ThreejsRenderer, ifc_file)
+def Append_IFC_Shapes_To_ThreejsRenderer_Object(THREEJS_RENDERER_OBJECT,IFC_FILE):
+    settings=ifcopenshell.geom.settings( )
+    settings.set( settings.USE_PYTHON_OPENCASCADE , True)
+    products = IFC_FILE.by_type( "IfcProduct" )
+    for product in products :
+        if product.is_a("IfcOpeningElement") or product.is_a("IfcAnnotation") or product.is_a("IfcSpace"):
+            continue
+        if product.Representation:
+            print(product.is_a())
+
+            r,g,b,o = GetTextureFromIfcProduct(product)
+            shape = ifcopenshell.geom.create_shape(settings, product).geometry
+            THREEJS_RENDERER_OBJECT.DisplayShape(shape, export_edges=False,color = (r,g,b),transparency = 0.5)
+
+@argument_check()
+def spinning_cursor():
+    while True:
+        for cursor in '|/-\\':
+            yield cursor
+
+@argument_check(tuple)
+def color_to_hex(rgb_color):
+    """ Takes a tuple with 3 floats between 0 and 1.
+    Returns a hex. Useful to convert occ colors to web color code
+    """
+    r, g, b = rgb_color
+    if not (0 <= r <= 1. and 0 <= g <= 1. and 0 <= b <= 1.):
+        raise AssertionError("rgb values must be between 0.0 and 1.0")
+    rh = int(r * 255.)
+    gh = int(g * 255.)
+    bh = int(b * 255.)
+    return "0x%.02x%.02x%.02x" % (rh, gh, bh)
+
+@argument_check(str, list)
+def export_edgedata_to_json(edge_hash, point_set):
+    """ Export a set of points to a LineSegment buffergeometry
+    """
+    # first build the array of point coordinates
+    # edges are built as follows:
+    # points_coordinates  =[P0x, P0y, P0z, P1x, P1y, P1z, P2x, P2y, etc.]
+    points_coordinates = []
+    for point in point_set:
+        for coord in point:
+            points_coordinates.append(coord)
+    # then build the dictionnary exported to json
+    edges_data = {"metadata": {"version": 4.4,
+                               "type": "BufferGeometry",
+                               "generator": "pythonocc"},
+                  "uuid": edge_hash,
+                  "type": "BufferGeometry",
+                  "data": {"attributes": {"position": {"itemSize": 3,
+                                                       "type": "Float32Array",
+                                                       "array": points_coordinates}
+                                         }
+                          }
+                  }
+    return json.dumps(edges_data)
+
+
 # ============== REQUEST FUNCTIONS ============
 
+@argument_check(LocalProxy)
 def getOpenGraphImageURL(REQUEST):
     return "".join([REQUEST.host_url[:-1], url_for( 'static', filename='image/Image_IFC_Viewer.png' )])
 
+@argument_check(LocalProxy)
 def getFullURL(REQUEST):
     return REQUEST.base_url
 
 # =============== Upload file ===============
 
+@argument_check(str)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config["UPLOADED_EXTENSIONS"]
 

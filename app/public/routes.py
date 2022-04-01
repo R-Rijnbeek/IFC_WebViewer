@@ -8,13 +8,14 @@ from os import listdir, remove
 from os.path import join, isfile, splitext
 
 from . import public_bp, js, upload
-from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file, methodLogging
+from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file, methodLogging, argument_check
 from ..shared import LOG
 
 # =============== DEFINE ENTRYPOINTS ==============
 
 @public_bp.route("/")
 @methodLogging
+@argument_check()
 def landing():	
 	try:
 		path = current_app.config["EXPOSITION_FOLDER"]
@@ -46,6 +47,7 @@ def landing():
 @js.route("/public/js/webGL.js", methods=["GET"])
 @returnsJS
 @methodLogging
+@argument_check()
 def get_js():
 	try:	
 		file_name = request.args["ifc"]
@@ -87,6 +89,7 @@ def get_js():
 
 @upload.route("/fileUpload", methods=["POST"])
 @methodLogging
+@argument_check()
 def fileUpload():
 	try:
 		if 'fileName' not in request.files:
