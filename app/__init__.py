@@ -8,6 +8,7 @@ __init__.py: This module define the the webservice function build with Flask
 from flask import Flask
 
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
+from .logger import ApplicationLogger
 
 # =============== PROCESS ===============
 
@@ -24,6 +25,20 @@ def create_app():
         app = Flask(__name__)
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
         app.config.from_pyfile("dev_config.cfg")
+        # DEFINE LOGGER INSTANCE
+        global log
+        log = ApplicationLogger("main_logger")
+        log.init_app(app)
+
+
+        log.info("Hello")
+        log.debug("debuger")
+        log.info("Hello")
+        log.debug("debuger")
+        log.info("Hello")
+        log.debug("debuger")
+        log.info("Hello")
+        log.debug("debuger")
 
         from .public import public_bp, js, upload
         app.register_blueprint(public_bp)
