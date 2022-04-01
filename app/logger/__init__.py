@@ -1,6 +1,8 @@
 import logging
 from functools import wraps
 
+import sys
+
 class LogStream():
     def __init__(self, MAX_RECORDS ):
 
@@ -54,6 +56,7 @@ class ApplicationLogger():
             )
             self._LOGGER = logging.getLogger(self.logname)
             self._activated = True
+            self.info(f"LoggerServes '{self.logname}' is activated!!")
             return True
         else:
             print("Logging service is not activated")
@@ -97,6 +100,9 @@ class ApplicationLogger():
     def critical(self, str):
         self.criticals += 1
         self._LOGGER.critical(str)
+
+    def getFunctionName(self):
+        return sys._getframe(1).f_code.co_name
 
 
 # =============== EXECUTE TEST CODE ===============

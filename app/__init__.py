@@ -5,10 +5,8 @@ __init__.py: This module define the the webservice function build with Flask
 """
 # =============== IMPORTS ==============
 
-from flask import Flask
-
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
-from .logger import ApplicationLogger
+from .shared import APP, LOG
 
 # =============== PROCESS ===============
 
@@ -21,40 +19,26 @@ def create_app():
     OUTPUT:BOOLEAN
     """
     try:
-        # DEFINING OF THE FLASK OBJECT
-        app = Flask(__name__)
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
-        app.config.from_pyfile("dev_config.cfg")
-        # DEFINE LOGGER INSTANCE
-        global log
-        log = ApplicationLogger("main_logger")
-        log.init_app(app)
-
-
-        log.info("Hello")
-        log.debug("debuger")
-        log.info("Hello")
-        log.debug("debuger")
-        log.info("Hello")
-        log.debug("debuger")
-        log.info("Hello")
-        log.debug("debuger")
+        APP.config.from_pyfile("dev_config.cfg")
+        # INITIALIZE LOGGER INSTANCE
+        LOG.init_app(APP)
 
         from .public import public_bp, js, upload
-        app.register_blueprint(public_bp)
-        app.register_blueprint(js)
-        app.register_blueprint(upload)
+        APP.register_blueprint(public_bp)
+        APP.register_blueprint(js)
+        APP.register_blueprint(upload)
 
-        shape_path = app.config["SHAPE_DIR"]
-        upload_path = app.config["UPLOAD_FOLDER"]
+        shape_path = APP.config["SHAPE_DIR"]
+        upload_path = APP.config["UPLOAD_FOLDER"]
         CreateDirectoryIfItNotExist(shape_path)
         CreateDirectoryIfItNotExist(upload_path)
         DeleteJSONFilesFromDirectory(shape_path)
 
-        host = app.config["HOST"]
-        port = app.config["PORT"]
+        host = APP.config["HOST"]
+        port = APP.config["PORT"]
 
-        app.run(host=host,port = port)
+        APP.run(host=host,port = port)
 
         return True
     except Exception as exc:
