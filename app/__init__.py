@@ -20,7 +20,7 @@ def create_app():
     """
     try:
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
-        APP.config.from_pyfile("dev_config.cfg")
+        APP.config.from_pyfile("config.cfg")
         # INITIALIZE LOGGER INSTANCE
         LOG.init_app(APP)
 
