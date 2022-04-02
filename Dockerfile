@@ -2,6 +2,10 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
+# Defining Config Vars
+ENV APP_DEBUG=0
+ENV APP_ENV=production
+
 # Installation of the libgl library neccesary for OCC/ifcopenshell libraries
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev

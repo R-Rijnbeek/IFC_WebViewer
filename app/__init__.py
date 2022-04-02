@@ -5,6 +5,7 @@ __init__.py: This module define the the webservice function build with Flask
 """
 # =============== IMPORTS ==============
 
+import os
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 from .shared import APP, LOG
 
@@ -42,6 +43,7 @@ def create_app():
         port = APP.config["PORT"]
 
         LOG.info("Run the WebService")
+        print(os.environ.get("APP_ENV","a ver que pasa"))#test case
         APP.run(host = host, port = port)
 
         return True
