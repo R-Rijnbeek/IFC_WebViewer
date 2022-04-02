@@ -2,6 +2,8 @@ FROM continuumio/miniconda3
 
 WORKDIR /app
 
+ARG HOLA=ADIOS
+ENV HOLA=${HOLA}
 # Installation of the libgl library neccesary for OCC/ifcopenshell libraries
 RUN apt-get update
 RUN apt-get install -y libgl1-mesa-dev
