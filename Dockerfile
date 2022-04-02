@@ -3,7 +3,6 @@ FROM continuumio/miniconda3
 WORKDIR /app
 
 # Defining Config Vars
-ENV HOLA=ADIOS
 ENV APP_DEBUG=0
 ENV APP_ENV=production
 

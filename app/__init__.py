@@ -39,11 +39,11 @@ def create_app():
         DeleteJSONFilesFromDirectory(shape_path)
 
         LOG.info("Defining 'HOST' and 'PORT'")
-        print(os.environ.get("HOLA","NOSE"))
         host = APP.config["HOST"]
         port = APP.config["PORT"]
 
         LOG.info("Run the WebService")
+        print(os.environ.get("APP_ENV","a ver que pasa"))#test case
         APP.run(host = host, port = port)
 
         return True
