@@ -5,3 +5,4 @@ setup:
   config:
     APP_DEBUG: 0
     APP_ENV: production
+    HOLA: ADIOS

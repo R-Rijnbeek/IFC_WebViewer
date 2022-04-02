@@ -5,6 +5,7 @@ __init__.py: This module define the the webservice function build with Flask
 """
 # =============== IMPORTS ==============
 
+import os
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 from .shared import APP, LOG
 
@@ -38,6 +39,7 @@ def create_app():
         DeleteJSONFilesFromDirectory(shape_path)
 
         LOG.info("Defining 'HOST' and 'PORT'")
+        print(os.environ.get("HOLA","NOSE"))
         host = APP.config["HOST"]
         port = APP.config["PORT"]
 
