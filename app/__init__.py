@@ -8,6 +8,8 @@ __init__.py: This module define the the webservice function build with Flask
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 from .shared import APP, LOG
 
+
+
 # =============== PROCESS ===============
 
 def create_app():
@@ -21,8 +23,12 @@ def create_app():
     try:
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
         APP.config.from_pyfile("config.cfg")
+        APP.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
         # INITIALIZE LOGGER INSTANCE
         LOG.init_app(APP)
+        #SESSION.init_app(APP)
+
+        
 
         LOG.info("Register Blueprints")
         from .public import public_bp, js, upload

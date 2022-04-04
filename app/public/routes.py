@@ -1,6 +1,6 @@
 # =============== IMPORTS ==============
 
-from flask import abort, render_template, request, current_app
+from flask import abort, render_template, request, current_app, session
 from werkzeug.utils import secure_filename
 import ifcopenshell
 
@@ -17,10 +17,7 @@ from ..utils import ( 	ThreejsRenderer,
 						methodLogging, 
 						argument_check
 						)
-from ..shared import LOG
-
-from copy import deepcopy
-import sys
+from ..shared import LOG, BULK
 
 # =============== DEFINE ENTRYPOINTS ==============
 
@@ -60,7 +57,7 @@ def landing():
 @methodLogging
 @argument_check()
 def get_js():
-	try:	
+	try:
 		file_name = request.args["ifc"]
 		filename, file_extension = splitext(file_name)
 		if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
@@ -68,8 +65,10 @@ def get_js():
 			try:
 				ifc_file = ifcopenshell.open(join(current_app.config["EXPOSITION_FOLDER"],file_name))
 			except:
-				ifc_file = ifcopenshell.open(join(current_app.config["UPLOAD_FOLDER"],file_name))
-				remove(join(current_app.config["UPLOAD_FOLDER"],file_name))
+				ifc_file = BULK.get_bulk_Key(file_name)
+				BULK.del_bulk_Key(file_name)
+
+				#ifc_file = ifcopenshell.open(join(current_app.config["UPLOAD_FOLDER"],file_name))
 			my_ren = ThreejsRenderer(path = shape_path )
 			Append_IFC_Shapes_To_ThreejsRenderer_Object(my_ren,ifc_file)
 			shape_content = my_ren.generate_shape_import_string()
@@ -114,32 +113,12 @@ def fileUpload():
 			LOG.warning(f"WARNING: {LOG.getFunctionName()}: File extension must be \".ifc\" format")
 			return "File extension must be \".ifc\" format", 400
 		if file and allowed_file(file.filename):
-
-			# a=file.stream.read().decode()
-			# b=a.read()
-			# print(b)
-			# try:
-			# 	c= b.decode()
-			# 	print(c)
-			# except:
-			# 	pass
-			streamFile = deepcopy(file)
-
-			ifc = ifcopenshell.file.from_string(streamFile.stream.read().decode())
-
-			# slab = c.by_type('IfcSlab')
-			# print(slab)
-
-
-			filename = secure_filename("".join(["temp_",file.filename]))
-			file_location = join(current_app.config['UPLOAD_FOLDER'],filename)
-			file.save(file_location)
 			try:
-				ifcopenshell.open(file_location)
+				filename = secure_filename("".join(["temp_",file.filename]))
+				BULK.set_bulk_Key(filename, ifcopenshell.file.from_string(file.stream.read().decode()))
 				return {"filename":filename}, 200
 			except Exception as exc:
 				LOG.warning(f"WARNING: {LOG.getFunctionName()}: {exc}")
-				remove(file_location)
 				return f"Problems parcing IFC file", 500
 	except Exception as exc:
 		LOG.error(f"ERROR: {LOG.getFunctionName()}: {exc}")
