@@ -8,8 +8,19 @@ from os import listdir, remove
 from os.path import join, isfile, splitext
 
 from . import public_bp, js, upload
-from ..utils import ThreejsRenderer, Append_IFC_Shapes_To_ThreejsRenderer_Object, returnsJS, getOpenGraphImageURL, getFullURL, allowed_file, methodLogging, argument_check
+from ..utils import ( 	ThreejsRenderer, 
+						Append_IFC_Shapes_To_ThreejsRenderer_Object, 
+						returnsJS, 
+						getOpenGraphImageURL, 
+						getFullURL, 
+						allowed_file, 
+						methodLogging, 
+						argument_check
+						)
 from ..shared import LOG
+
+from copy import deepcopy
+import sys
 
 # =============== DEFINE ENTRYPOINTS ==============
 
@@ -103,6 +114,23 @@ def fileUpload():
 			LOG.warning(f"WARNING: {LOG.getFunctionName()}: File extension must be \".ifc\" format")
 			return "File extension must be \".ifc\" format", 400
 		if file and allowed_file(file.filename):
+
+			# a=file.stream.read().decode()
+			# b=a.read()
+			# print(b)
+			# try:
+			# 	c= b.decode()
+			# 	print(c)
+			# except:
+			# 	pass
+			streamFile = deepcopy(file)
+
+			ifc = ifcopenshell.file.from_string(streamFile.stream.read().decode())
+
+			# slab = c.by_type('IfcSlab')
+			# print(slab)
+
+
 			filename = secure_filename("".join(["temp_",file.filename]))
 			file_location = join(current_app.config['UPLOAD_FOLDER'],filename)
 			file.save(file_location)
