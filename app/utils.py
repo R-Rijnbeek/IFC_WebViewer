@@ -1,6 +1,6 @@
 # =============== IMPORTS ==============
 
-from flask import make_response, url_for, current_app
+from flask import url_for, current_app
 from OCC.Core.Tesselator import ShapeTesselator
 from OCC.Extend.TopologyUtils import is_edge, is_wire, discretize_edge, discretize_wire
 import ifcopenshell.geom
@@ -11,7 +11,6 @@ from werkzeug.local import LocalProxy
 import ifcopenshell.entity_instance as ifc_instance
 import ifcopenshell.file as ifc_file
 
-from functools import wraps
 import os
 import sys
 import glob
@@ -19,28 +18,7 @@ import json
 from uuid import uuid4
 
 from .shared import LOG
-from .decorators import argument_check
-
-# ============= DECORATORS ==========
-
-
-# def returnsJS(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         resp = make_response(f(*args, **kwargs),200)
-#         resp.headers['Content-Type'] = 'application/javascript'
-#         return resp
-#     return decorated_function
-
-def methodLogging(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        uniqueID = uuid4()
-        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
-        output = f(*args, **kwargs)
-        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ , "output": str(output)}))
-        return output
-    return decorated_function
+from .decorators import argument_check, methodLogging
 
 # =============== PROCESS ===============
 

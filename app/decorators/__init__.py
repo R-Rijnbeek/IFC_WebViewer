@@ -1,6 +1,8 @@
-from flask import make_response
+from flask import json, make_response
 
 from functools import wraps
+from uuid import uuid4
+import json
 
 # ============= DECORATORS ==========
 
@@ -49,12 +51,13 @@ def returnsJS(f):
         return resp
     return decorated_function
 
-# def methodLogging(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         uniqueID = uuid4()
-#         LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
-#         output = f(*args, **kwargs)
-#         LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ , "output": str(output)}))
-#         return output
-#     return decorated_function
+def methodLogging(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        from ..shared import LOG
+        uniqueID = uuid4()
+        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
+        output = f(*args, **kwargs)
+        LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ , "output": str(output)}))
+        return output
+    return decorated_function
