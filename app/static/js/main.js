@@ -5,11 +5,11 @@ function renderIFC() {
     enableRenderingAnimation();
     switch(menu_index) {
         case 1:
-            processIFCSelectRequest();
+            processSelectIFC();
             resetIFCSelector();
             break;
         case 2:
-            processSelectedIFC();
+            processUploadedIFC();
             resetIFCFileSelector();
             break;
         default:
@@ -31,13 +31,29 @@ function addWebGLSourceToHead(value){
     head.appendChild(script);
 }
 
-function processIFCSelectRequest(){
+function processSelectIFC(){
     var select = document.getElementById('ifc_file');
     var filename = select.options[select.selectedIndex].value;
-    addWebGLSourceToHead(filename);
+    //addWebGLSourceToHead(filename);
+    $.ajax({
+        type: 'post',
+        url: "fileSelect" ,
+        processData: false,
+        contentType:"application/json",
+        data: JSON.stringify({filename: filename}),
+        success: function (response) {
+            var key = response.key;
+            addWebGLSourceToHead(key)
+        },
+        error: function (err) {
+            displayMessage(err.responseText);
+            disableRenderingAnimation();
+        }
+    });
+    return false;
 }
 
-function processSelectedIFC() {
+function processUploadedIFC() {
     let files = new FormData();
     files.append('fileName', $('#getFile')[0].files[0]);
     $.ajax({
@@ -47,8 +63,8 @@ function processSelectedIFC() {
         contentType: false,
         data: files,
         success: function (response) {
-            var filename = response.filename;
-            addWebGLSourceToHead(filename)
+            var key = response.key;
+            addWebGLSourceToHead(key)
         },
         error: function (err) {
             displayMessage(err.responseText);

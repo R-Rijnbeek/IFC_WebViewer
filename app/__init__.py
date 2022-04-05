@@ -23,12 +23,9 @@ def create_app():
     try:
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
         APP.config.from_pyfile("config.cfg")
-        APP.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+
         # INITIALIZE LOGGER INSTANCE
         LOG.init_app(APP)
-        #SESSION.init_app(APP)
-
-        
 
         LOG.info("Register Blueprints")
         from .public import public_bp, js, upload

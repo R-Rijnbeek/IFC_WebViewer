@@ -1,11 +1,14 @@
 # =============== IMPORTS ==============
 
-from flask import abort, render_template, request, current_app, session
+from flask import abort, render_template, request, current_app
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTPException
 import ifcopenshell
 
-from os import listdir, remove
-from os.path import join, isfile, splitext
+from os import listdir
+from os.path import join, isfile, exists
+
+from uuid import uuid4
 
 from . import public_bp, js, upload
 from ..utils import ( 	ThreejsRenderer, 
@@ -59,16 +62,15 @@ def landing():
 def get_js():
 	try:
 		file_name = request.args["ifc"]
-		filename, file_extension = splitext(file_name)
-		if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
+		#filename, file_extension = splitext(file_name)
+		#if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
+		if True :
 			shape_path = current_app.config["SHAPE_DIR"]
-			try:
-				ifc_file = ifcopenshell.open(join(current_app.config["EXPOSITION_FOLDER"],file_name))
-			except:
-				ifc_file = BULK.get_bulk_Key(file_name)
-				BULK.del_bulk_Key(file_name)
-
-				#ifc_file = ifcopenshell.open(join(current_app.config["UPLOAD_FOLDER"],file_name))
+			# try:
+			# 	ifc_file = ifcopenshell.open(join(current_app.config["EXPOSITION_FOLDER"],file_name))
+			# except:
+			ifc_file = BULK.get_bulk_Key(file_name)
+			BULK.del_bulk_Key(file_name)
 			my_ren = ThreejsRenderer(path = shape_path )
 			Append_IFC_Shapes_To_ThreejsRenderer_Object(my_ren,ifc_file)
 			shape_content = my_ren.generate_shape_import_string()
@@ -97,6 +99,46 @@ def get_js():
 				error_message="INTERNAL SERVER ERROR"
 				)
 
+@upload.route("/fileSelect", methods=["POST"])
+@methodLogging
+@argument_check()
+def fileSelect():
+	try:
+		data = request.get_json()
+		if 'filename' not in data:
+			LOG.warning(f"WARNING: {LOG.getFunctionName()}: Request have wrong data format")
+			return "Request have wrong data format", 400
+		filename = data["filename"]
+		if filename == '':
+			LOG.warning(f"WARNING: {LOG.getFunctionName()}: No selected file")
+			return "No selected file", 400
+		if not allowed_file(filename):
+			LOG.warning(f"WARNING: {LOG.getFunctionName()}: File extension must be \".ifc\" format")
+			return "File extension must be \".ifc\" format", 400
+		file_path = join(current_app.config["EXPOSITION_FOLDER"],filename)
+		if not exists(file_path) :
+			LOG.warning(f"ERROR: {LOG.getFunctionName()}: File does not exist on path")
+			return "INTERNAL SERVER ERROR", 500
+		try:
+			ifc_file = ifcopenshell.open(file_path)
+			uniqueKey = str(uuid4())
+			BULK.set_bulk_Key(uniqueKey, ifc_file)
+			return {"key":uniqueKey}, 200
+		except Exception as exc:
+			LOG.warning(f"WARNING: {LOG.getFunctionName()}: {exc}")
+			return f"Problems parcing IFC file", 400
+	except Exception as exc:
+		if isinstance(exc, HTTPException):
+			if (exc.code == 413) :
+				LOG.warning(f"Warning: {LOG.getFunctionName()}: {exc}")
+				return f"File is to large", 413
+			else: 
+				return f"Somthing went wrong processing ifc file", exc.code
+		else:
+			LOG.error(f"ERROR: {LOG.getFunctionName()}: {exc}")
+			return f"INTERNAL SERVER ERROR", 500
+
+
 @upload.route("/fileUpload", methods=["POST"])
 @methodLogging
 @argument_check()
@@ -115,14 +157,22 @@ def fileUpload():
 		if file and allowed_file(file.filename):
 			try:
 				filename = secure_filename("".join(["temp_",file.filename]))
-				BULK.set_bulk_Key(filename, ifcopenshell.file.from_string(file.stream.read().decode()))
-				return {"filename":filename}, 200
+				uniqueKey = str(uuid4())
+				BULK.set_bulk_Key(uniqueKey, ifcopenshell.file.from_string(file.stream.read().decode()))
+				return {"key":uniqueKey}, 200
 			except Exception as exc:
 				LOG.warning(f"WARNING: {LOG.getFunctionName()}: {exc}")
 				return f"Problems parcing IFC file", 500
 	except Exception as exc:
-		LOG.error(f"ERROR: {LOG.getFunctionName()}: {exc}")
-		return f"INTERNAL SERVER ERROR", 500
+		if isinstance(exc, HTTPException):
+			if (exc.code == 413) :
+				LOG.warning(f"Warning: {LOG.getFunctionName()}: {exc}")
+				return f"File is to large", 413
+			else:
+				return f"Somthing went wrong processing ifc file", exc.code
+		else:
+			LOG.error(f"ERROR: {LOG.getFunctionName()}: {exc}")
+			return f"INTERNAL SERVER ERROR", 500
 
 # =============== EXECUTE TEST CODE ===============
 

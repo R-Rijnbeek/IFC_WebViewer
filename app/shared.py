@@ -1,8 +1,8 @@
 # =============== DEFINE BLUEPRINTS ==============
 
 from flask import Flask
-from .bulk import Bulk
 from .logger import ApplicationLogger
+from .bulk import Bulk
 
 # =============== DEFINE SHARED OBJECTS ==============
 
