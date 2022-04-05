@@ -7,16 +7,13 @@ import ifcopenshell
 
 from . import public_bp, js, upload
 from ..shared import LOG, BULK
+from ..decorators import argument_check, returnsJS, methodLogging
 from ..utils import ( 	ThreejsRenderer, 
-						Append_IFC_Shapes_To_ThreejsRenderer_Object, 
-						returnsJS, 
+						Append_IFC_Shapes_To_ThreejsRenderer_Object,  
 						getOpenGraphImageURL, 
 						getFullURL, 
-						allowed_file, 
-						methodLogging, 
-						argument_check
+						allowed_file
 						)
-
 
 from os import listdir
 from os.path import join, isfile, exists
