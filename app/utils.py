@@ -314,22 +314,18 @@ def CreateDirectoryIfItNotExist(PATH):
 @methodLogging
 @argument_check(ThreejsRenderer, ifc_file)
 def Append_IFC_Shapes_To_ThreejsRenderer_Object(THREEJS_RENDERER_OBJECT,IFC_FILE):
-    try:
-        settings=ifcopenshell.geom.settings( )
-        settings.set( settings.USE_PYTHON_OPENCASCADE , True)
-        products = IFC_FILE.by_type( "IfcProduct" )
-        for product in products :
-            if product.is_a("IfcOpeningElement") or product.is_a("IfcAnnotation") or product.is_a("IfcSpace"):
-                continue
-            if product.Representation:
-                print(product.is_a())
+    settings=ifcopenshell.geom.settings( )
+    settings.set( settings.USE_PYTHON_OPENCASCADE , True)
+    products = IFC_FILE.by_type( "IfcProduct" )
+    for product in products :
+        if product.is_a("IfcOpeningElement") or product.is_a("IfcAnnotation") or product.is_a("IfcSpace"):
+            continue
+        if product.Representation:
+            print(product.is_a())
 
-                r,g,b,o = GetTextureFromIfcProduct(product)
-                shape = ifcopenshell.geom.create_shape(settings, product).geometry
-                THREEJS_RENDERER_OBJECT.DisplayShape(shape, export_edges=False,color = (r,g,b),transparency = 0.5)
-    except Exception as exc:
-        print("ERROR")
-        return False
+            r,g,b,o = GetTextureFromIfcProduct(product)
+            shape = ifcopenshell.geom.create_shape(settings, product).geometry
+            THREEJS_RENDERER_OBJECT.DisplayShape(shape, export_edges=False,color = (r,g,b),transparency = 0.5)
 
 @argument_check()
 def spinning_cursor():
