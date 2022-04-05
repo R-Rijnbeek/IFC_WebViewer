@@ -1,4 +1,4 @@
-from ..decorators import argument_check
+from ...utils.decorators import argument_check
 
 class Bulk:
     @argument_check(object)
@@ -11,7 +11,7 @@ class Bulk:
 
     @argument_check(object,str)
     def get_bulk_Key(self, key):
-        from ..shared import LOG
+        from ...shared import LOG
         try:
             return self._data[key]
         except Exception as exc:
@@ -20,7 +20,7 @@ class Bulk:
 
     @argument_check(object,str,object)
     def set_bulk_Key(self, key,  value):
-        from ..shared import LOG
+        from ...shared import LOG
         try:
             self._data[key] = value
             return True
@@ -30,7 +30,7 @@ class Bulk:
 
     @argument_check(object,str)
     def del_bulk_Key(self, key):
-        from ..shared import LOG
+        from ...shared import LOG
         try:
             del self._data[key]
             return True

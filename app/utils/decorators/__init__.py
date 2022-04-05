@@ -54,7 +54,7 @@ def returnsJS(f):
 def methodLogging(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        from ..shared import LOG
+        from ...shared import LOG
         uniqueID = uuid4()
         LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
         output = f(*args, **kwargs)

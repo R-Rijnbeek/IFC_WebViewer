@@ -9,7 +9,6 @@ from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 from .shared import APP, LOG
 
 
-
 # =============== PROCESS ===============
 
 def create_app():
