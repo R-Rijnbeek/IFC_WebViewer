@@ -8,6 +8,8 @@ __init__.py: This module define the the webservice function build with Flask
 from .utils import DeleteJSONFilesFromDirectory, CreateDirectoryIfItNotExist
 from .shared import APP, LOG
 
+
+
 # =============== PROCESS ===============
 
 def create_app():
@@ -21,6 +23,7 @@ def create_app():
     try:
         # CONFIGURE THE FLASK OBJECT with the 'dev_config.cfg' configuration file
         APP.config.from_pyfile("config.cfg")
+
         # INITIALIZE LOGGER INSTANCE
         LOG.init_app(APP)
 
@@ -32,9 +35,7 @@ def create_app():
 
         LOG.info("Execute methods for initialization")
         shape_path = APP.config["SHAPE_DIR"]
-        upload_path = APP.config["UPLOAD_FOLDER"]
         CreateDirectoryIfItNotExist(shape_path)
-        CreateDirectoryIfItNotExist(upload_path)
         DeleteJSONFilesFromDirectory(shape_path)
 
         LOG.info("Defining 'HOST' and 'PORT'")
