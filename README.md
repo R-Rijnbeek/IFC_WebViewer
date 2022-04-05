@@ -56,5 +56,5 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
 3. Put an render process bar on client side when ifc file is processed on server site.
 4. Remove all tree.js instances when reloading an new object.
 5. Will be fine to include and opacity slider GUI on rendering window.
-6. Deply it with a gunicorn/wsgi solution
+6. Deploy it with a gunicorn/wsgi solution
 7. .....
