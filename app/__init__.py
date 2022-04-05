@@ -35,9 +35,7 @@ def create_app():
 
         LOG.info("Execute methods for initialization")
         shape_path = APP.config["SHAPE_DIR"]
-        upload_path = APP.config["UPLOAD_FOLDER"]
         CreateDirectoryIfItNotExist(shape_path)
-        CreateDirectoryIfItNotExist(upload_path)
         DeleteJSONFilesFromDirectory(shape_path)
 
         LOG.info("Defining 'HOST' and 'PORT'")

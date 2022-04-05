@@ -5,12 +5,8 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import HTTPException
 import ifcopenshell
 
-from os import listdir
-from os.path import join, isfile, exists
-
-from uuid import uuid4
-
 from . import public_bp, js, upload
+from ..shared import LOG, BULK
 from ..utils import ( 	ThreejsRenderer, 
 						Append_IFC_Shapes_To_ThreejsRenderer_Object, 
 						returnsJS, 
@@ -20,7 +16,11 @@ from ..utils import ( 	ThreejsRenderer,
 						methodLogging, 
 						argument_check
 						)
-from ..shared import LOG, BULK
+
+
+from os import listdir
+from os.path import join, isfile, exists
+from uuid import uuid4
 
 # =============== DEFINE ENTRYPOINTS ==============
 
@@ -62,29 +62,16 @@ def landing():
 def get_js():
 	try:
 		file_name = request.args["ifc"]
-		#filename, file_extension = splitext(file_name)
-		#if file_extension.replace(".", "") in current_app.config["UPLOADED_EXTENSIONS"]:
-		if True :
-			shape_path = current_app.config["SHAPE_DIR"]
-			# try:
-			# 	ifc_file = ifcopenshell.open(join(current_app.config["EXPOSITION_FOLDER"],file_name))
-			# except:
-			ifc_file = BULK.get_bulk_Key(file_name)
-			BULK.del_bulk_Key(file_name)
-			my_ren = ThreejsRenderer(path = shape_path )
-			Append_IFC_Shapes_To_ThreejsRenderer_Object(my_ren,ifc_file)
-			shape_content = my_ren.generate_shape_import_string()
-			return render_template(
-				"public/js/webGL.js", 
-				shape_content = shape_content
-				)
-		else:
-			message = "it is not a valid file extension: it must be '.ifc'"
-			LOG.warning(f"WARNING: {LOG.getFunctionName()}: {message}")
-			return render_template(
-				"public/js/webGL_ERROR.js", 
-				error_message= message
-				)
+		shape_path = current_app.config["SHAPE_DIR"]
+		ifc_file = BULK.get_bulk_Key(file_name)
+		BULK.del_bulk_Key(file_name)
+		my_ren = ThreejsRenderer(path = shape_path )
+		Append_IFC_Shapes_To_ThreejsRenderer_Object(my_ren,ifc_file)
+		shape_content = my_ren.generate_shape_import_string()
+		return render_template(
+			"public/js/webGL.js", 
+			shape_content = shape_content
+			)
 	except Exception as exc:
 		if (hasattr(exc, '__module__') and ( exc.__module__== "ifcopenshell")):
 			LOG.warning(f"WARNING: {LOG.getFunctionName()}: {exc}")
@@ -158,8 +145,13 @@ def fileUpload():
 			try:
 				filename = secure_filename("".join(["temp_",file.filename]))
 				uniqueKey = str(uuid4())
-				BULK.set_bulk_Key(uniqueKey, ifcopenshell.file.from_string(file.stream.read().decode()))
-				return {"key":uniqueKey}, 200
+				ifc = ifcopenshell.file.from_string(file.stream.read().decode())
+				if ifc.schema == "IFC2X3":
+					BULK.set_bulk_Key(uniqueKey, ifc)
+					return {"key":uniqueKey}, 200
+				else:
+					LOG.warning(f"WARNING: {LOG.getFunctionName()}: IFC file must be 'IFC2X3'")
+					return f"IFC file must be 'IFC2X3'", 400
 			except Exception as exc:
 				LOG.warning(f"WARNING: {LOG.getFunctionName()}: {exc}")
 				return f"Problems parcing IFC file", 500
