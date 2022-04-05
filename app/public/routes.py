@@ -7,7 +7,7 @@ import ifcopenshell
 
 from . import public_bp, js, upload
 from ..shared import LOG, BULK
-from ..decorators import argument_check, returnsJS, methodLogging
+from ..utils.decorators import argument_check, returnsJS, methodLogging
 from ..utils import ( 	ThreejsRenderer, 
 						Append_IFC_Shapes_To_ThreejsRenderer_Object,  
 						getOpenGraphImageURL, 

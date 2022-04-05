@@ -17,8 +17,8 @@ import glob
 import json
 from uuid import uuid4
 
-from .shared import LOG
-from .decorators import argument_check, methodLogging
+from ..shared import LOG
+from ..utils.decorators import argument_check, methodLogging
 
 # =============== PROCESS ===============
 
