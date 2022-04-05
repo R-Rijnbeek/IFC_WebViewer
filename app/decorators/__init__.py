@@ -1,3 +1,7 @@
+from flask import make_response
+
+from functools import wraps
+
 # ============= DECORATORS ==========
 
 def argument_check(*types_args,**types_kwargs):
@@ -36,3 +40,21 @@ def argument_check(*types_args,**types_kwargs):
         function_wrapper.__name__ = f.__name__
         return function_wrapper
     return check_accepts
+
+def returnsJS(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        resp = make_response(f(*args, **kwargs),200)
+        resp.headers['Content-Type'] = 'application/javascript'
+        return resp
+    return decorated_function
+
+# def methodLogging(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         uniqueID = uuid4()
+#         LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ ,"type":str(f.__class__), "path":f.__code__.co_filename, "arg": str(args) , "kwargs": str(kwargs)}))
+#         output = f(*args, **kwargs)
+#         LOG.info(json.dumps({"uniqueID":str(uniqueID), "metodo": f.__name__ , "output": str(output)}))
+#         return output
+#     return decorated_function
