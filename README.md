@@ -40,7 +40,7 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
 ## Notes to know: 
 
 1. The dependencies to use all features of this repository are writed on the environmet.yml file: OCC, ifcopenshell and Flask
-2. If you will only use the content of this repository. On a other project than you need to create an virtual environment that include "ifcopenshell", "OCC" and "flask"
+2. If you will only use the content of this repository. On a other project than you need to create an virtual environment that include "ifcopenshell", "OCC" and "flask" and "python=3.9"
     * ANACONDA:
     ```
     conda install -c conda-forge pythonocc-core ifcopenshell
@@ -51,9 +51,10 @@ If it works. Than you can open your webbrowser and visualize the IFC content on:
 
 ## Improvments
 
-1. Uploaded ifc files will must be stored in memory and no on a location of the server.
+1. Find alternative to store IFC instances and not having problems when app is deployed with more than on worker
 2. Include multiprocessing to make the process rendering process faster on server site.
 3. Put an render process bar on client side when ifc file is processed on server site.
 4. Remove all tree.js instances when reloading an new object.
 5. Will be fine to include and opacity slider GUI on rendering window.
-6. ....
+6. Deply it with a gunicorn/wsgi solution
+7. .....
