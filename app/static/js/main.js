@@ -34,7 +34,7 @@ function addWebGLSourceToHead(value){
 function processSelectIFC(){
     var select = document.getElementById('ifc_file');
     var filename = select.options[select.selectedIndex].value;
-    //addWebGLSourceToHead(filename);
+    //addWebGLSourceToHead(filename); 
     $.ajax({
         type: 'post',
         url: "fileSelect" ,
