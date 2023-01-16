@@ -8,7 +8,7 @@ import json
 
 def argument_check(*types_args,**types_kwargs):
     """
-    INFORMATION: Standard decorator with arguments that is used to verify the agument (arg) or opttion arguments (kwargs) 
+    INFORMATION: Standard  decorator with arguments that is used to verify the agument (arg) or opttion arguments (kwargs) 
                  of linked function. If the decorator see an not valid argument or kwarg in the funcion. 
                  There will be generate an exception with the explanation with the argument that is not correct.
     INPUT: 
